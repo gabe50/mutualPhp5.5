@@ -1,0 +1,334 @@
+{% extends 'Base/base.html' %} 
+{% block title %}Usuario perfil{% endblock %}
+{% block wrapper %}
+<section class="content-header">
+    <h1>
+        Usuarios
+        <small>Ver mas</small>
+    </h1>
+    <ol class="breadcrumb">
+        <li>
+            <a href="index.php">
+                <i class="fa fa-home"></i> Inicio</a>
+        </li>
+        <li class="active">Perfil de usuario</li>
+    </ol>
+</section>
+{% endblock %} {% block content %}
+<div class="box-header text-center" {% if permiso=='0' %} style="display:none" {% endif %}>
+    <h1>
+        <span class="label label-success">Los permisos se modificaron correctamente.</span>
+    </h1>
+</div>
+
+<div class="box-header text-center" {% if modificar=='0' %} style="display:none" {% endif %}>
+    <h1>
+        <span class="label label-success">El usuario se modificó correctamente.</span>
+    </h1>
+</div>
+
+<div class="box-header text-center" {% if contrasena=='0' %} style="display:none" {% endif %}>
+    <h1>
+        <span class="label label-success">La contraseña se modificó correctamente.</span>
+    </h1>
+</div>
+
+<section class="content">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="nav-tabs-custom">
+                <ul class="nav nav-tabs">
+                    <li class="active">
+                        <a href="#datos_persona" data-toggle="tab">Datos personales</a>
+                    </li>
+                    <li>
+                        <a href="#datos_cuenta" data-toggle="tab">Datos de la cuenta</a>
+                    </li>
+                    <li>
+                        <a href="#permisos" data-toggle="tab">Permisos</a>
+                    </li>
+                    <li>
+                        <a href="#eliminar" data-toggle="tab">Eliminar</a>
+                    </li>
+                </ul>
+
+                <div class="tab-content">
+                    <div class="active tab-pane" id="datos_persona">
+                        <div class="post">
+                            {% for res in usuario %}
+                            <div class="box box-solid box-primary">
+                                <div class="box-header">
+                                    <div class="user-block">
+                                        {% if res.sexo == 'M' %}
+                                        <img class="img-circle img-bordered-sm" src="../../static/images/user.png" alt="user image"> {% else %}
+                                        <img class="img-circle img-bordered-sm" src="../../static/images/user_fem.png" alt="user image"> {% endif %}
+                                        <span class="username">
+                                            <h4 class="box-title">
+                                                <b>
+                                                    <a href="#">{{ res.nombre }} | {{ res.edad }} Años</a>
+                                                </b>
+                                            </h4>
+                                        </span>
+                                    </div>
+                                </div>
+                                <div class="box-body">
+                                    <form action="../controllers/usuarios.php?funcion=modificarUsuario" method="post">
+                                        <fieldset>
+                                            <legend>Datos básicos</legend>
+                                            <div class="row">
+                                                <div class="col-md-6 form-group">
+                                                    <label for="nombre">Nombre y apellido *</label>
+                                                    <br/>
+                                                    <input type="text" class="form-control" id="nombre" name="nombre" required value="{{ res.nombre }}" maxlength="30"/>
+                                                </div>
+
+                                                <div class="col-md-3 form-group">
+                                                    <label for="doc">Número de documento *</label>
+                                                    <br/>
+                                                    <input type="text" class="form-control" id="doc" name="doc" required value="{{ res.numdoc }}" maxlength="8"/>
+                                                </div>
+
+                                                <div class="col-md-3 form-group">
+                                                    <label for="sexo">Sexo</label>
+                                                    <br/>
+                                                    <select class="selectpicker" name="sexo" id="sexo" required>
+                                                        <option value="M">Masculino</option>
+                                                        <option value="F" {% if res.sexo=='F' %}selected{% endif %}>Femenino</option>
+                                                    </select>
+                                                </div>
+
+                                                <div class="col-md-6 form-group">
+                                                    <label for="fech_nac">Fecha de nacimiento *</label>
+                                                    <br/>
+                                                    <div class="input-group date" data-provide="datepicker" data-date-format="yyyy-mm-dd" data-date-today-highlight="true" data-date-language='es'>
+                                                        <input type="text" class="form-control" id="fech_nac" name="fech_nac" required value="{{ res.fecnacim }}">
+                                                        <div class="input-group-addon">
+                                                            <span class="glyphicon glyphicon-calendar"></span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+
+                                                <div class="col-md-3 form-group">
+                                                    <label for="fijo">Teléfono fijo</label>
+                                                    <br/>
+                                                    <input type="text" class="form-control" id="fijo" name="fijo" value="{{ res.tel_fijo }}" maxlength="10"/>
+                                                </div>
+
+                                                <div class="col-md-3 form-group">
+                                                    <label for="celu">Teléfono celular</label>
+                                                    <br/>
+                                                    <input type="text" class="form-control" id="celu" name="celu" value="{{ res.tel_cel }}" maxlength="15"/>
+                                                </div>
+
+                                            </div>
+                                        </fieldset>
+
+                                        <fieldset>
+                                            <legend>Domicilio</legend>
+                                            <div class="row">
+                                                <div class="col-md-6 form-group">
+                                                    <label for="dom">Domicilio</label>
+                                                    <input type="text" class="form-control" name="dom" id="dom" value="{{ res.domicilio }}" maxlength="40"/>
+                                                </div>
+
+                                                <div class="col-md-6 form-group">
+                                                    <label for="nrocasa">Numero de casa</label>
+                                                    <input type="text" class="form-control" name="nrocasa" id="nrocasa" value="{{ res.casa_nro }}" maxlength="4"/>
+                                                </div>
+
+                                                <div class="col-md-6 form-group">
+                                                    <label for="barrio">Barrio</label>
+                                                    <input type="text" class="form-control" name="barrio" id="barrio" value="{{ res.barrio }}" maxlength="50"/>
+                                                </div>
+
+                                                <div class="col-md-6 form-group">
+                                                    <label for="localidad">Localidad</label>
+                                                    <input type="text" class="form-control" name="localidad" id="localidad" value="{{ res.localidad }}" maxlength="50"/>
+                                                </div>
+
+                                                <div class="col-md-6 form-group">
+                                                    <label for="codpostal">Código postal</label>
+                                                    <input type="text" class="form-control" name="codpostal" id="codpostal" value="{{ res.codpostal }}" maxlength="4"/>
+                                                </div>
+
+                                                <div class="col-md-6 form-group">
+                                                    <label for="dpto">Departamento</label>
+                                                    <input type="text" class="form-control" name="dpto" id="dpto" value="{{ res.dpmto }}" maxlength="50"/>
+                                                </div>
+                                            </div>
+                                        </fieldset>
+                                        <div class="row">
+                                            <br>
+                                            <br>
+                                            <div class="col-md-6">
+                                                <input class="btn btn-block btn-success" id="modificar_usuario_boton" type="submit" name="crear_usuario" value="Actualizar Datos"
+                                                />
+                                            </div>
+                                            <div class="col-md-6">
+                                                <a href="../controllers/usuarios.php?funcion=mostrarListado">
+                                                    <input class="btn btn-block btn-default" type="button" name="cancelar" value="Cancelar"
+                                                    />
+                                                </a>
+                                            </div>
+                                            <input style="display:none" type="text" class="form-control" name="id_persona" id="id_persona" value="{{ res.id_persona }}"/>
+                                            <input style="display:none" type="text" class="form-control" name="id_usuario" id="id_usuario" value="{{ res.id_usuario }}"/>
+                                    </form>
+                                    </div>
+                                </div>
+                            </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+
+                    <div class="tab-pane" id="datos_cuenta">
+                        {% for res in usuario %}
+                        <form action="../controllers/usuarios.php?funcion=modificarContrasena" method="post">
+                            <div class="row">
+                                <div class="col-md-6 form-group">
+                                    <label for="nombre">Usuario</label>
+                                    <br/>
+                                    <input type="text" class="form-control" id="usuario" name="usuario" readonly value="{{ res.usuario }}" />
+                                </div>
+
+                                <div class="col-md-2 form-group">
+                                    <label for="fecha">Fecha creacion</label>
+                                    <br/>
+                                    <input type="text" class="form-control" id="fecha" name="fecha" readonly value="{{ res.fech_creacion }}" />
+                                </div>
+
+                                <div class="col-md-3 form-group">
+                                    <label for="doc">Password</label>
+                                    <br/>
+                                    <input type="text" class="form-control" id="pass" name="pass" value="{{ res.password }}" />
+                                </div>
+
+
+                                <input style="display:none" type="text" class="form-control" name="id_usuario" id="id_usuario" value="{{ res.id_usuario }}"/>
+
+                            </div>
+                            <div class="row">
+                                <br>
+                                <br>
+                                <div class="col-md-6">
+                                    <input class="btn btn-block btn-success" type="submit" name="modificar_permisos" value="Cambiar contraseña" />
+                                </div>
+                                <div class="col-md-6">
+                                    <a href="../controllers/usuarios.php?funcion=mostrarListado">
+                                        <input class="btn btn-block btn-default" type="button" name="cancelar" value="Cancelar" />
+                                    </a>
+                                </div>
+                            </div>
+                        </form>
+                        {% endfor %}
+                    </div>
+
+                    <div class="tab-pane" id="permisos">
+                        <fieldset>
+                            <legend>Permisos del usuario</legend>
+                            <form action="../controllers/usuarios.php?funcion=modificarPrivilegios" method="post">
+                                <div class="row">
+                                    <div class="col-md-2 form-group">
+                                        <label>
+                                            <input type="checkbox" name="atenciones" id="atenciones" {% if privilegios.atenciones==1 %}checked{% else %}{% endif %}>Atenciones</label>
+                                    </div>
+
+                                    <div class="col-md-2 form-group">
+                                        <label>
+                                            <input type="checkbox" name="estadisticas" id="estadisticas" {% if privilegios.estadisticas==1 %}checked{% else %}{% endif
+                                                %}>Estadisticas</label>
+                                    </div>
+
+                                    <div class="col-md-2 form-group">
+                                        <label>
+                                            <input type="checkbox" name="usuarios" id="usuarios" {% if privilegios.usuarios==1 %}checked{% else %}{% endif %}>Usuarios</label>
+                                    </div>
+
+                                    <div class="col-md-2 form-group">
+                                        <label>
+                                            <input type="checkbox" name="profesionales" id="profesionales" {% if privilegios.profesionales==1 %}checked{% else %}{% endif
+                                                %}>Profesionales</label>
+                                    </div>
+
+                                    <div class="col-md-2 form-group">
+                                        <label>
+                                            <input type="checkbox" name="historia" id="historia" {% if privilegios.historia==1 %}checked{% else %}{% endif %}>Historia clínica</label>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <br>
+                                    <br>
+                                    <div class="col-md-6">
+                                        <input class="btn btn-block btn-success" type="submit" name="modificar_permisos" value="Actualizar permisos" />
+                                    </div>
+                                    <div class="col-md-6">
+                                        <a href="../controllers/usuarios.php?funcion=mostrarListado">
+                                            <input class="btn btn-block btn-default" type="button" name="cancelar" value="Cancelar" />
+                                        </a>
+                                    </div>
+                                </div>
+
+                                <input style="display:none" type="text" class="form-control" name="id_usuario" id="id_usuario" value="{{ id_usuario }}" />
+                            </form>
+                        </fieldset>
+                    </div>
+
+                    <div class="tab-pane" id="eliminar">
+                        <div class="box box-danger" >
+                                <div class="box-header">
+                                    <h3 class="box-title">ELIMINAR USUARIO (Se eliminara toda su informacion de la base de datos permanentemente)</h3>
+                                </div>
+                                <div class="box-body">
+                                        <form action="../controllers/usuarios.php?funcion=eliminarUsuario" method="post">
+                                            <div class="row">
+                                                <div class="col-md-2 form-group">
+                                                    <input type="text" name="borrar" id="borrar" placeholder="Escriba BORRAR para eliminar al usuario" oninput="comprobar()">
+                                                </div>
+                                                <div class="col-md-2 form-group">
+                                                    <input class="btn btn-block btn-danger" type="submit" id="eliminar_usuario" name="eliminar_usuario" value="Eliminar Usuario" disabled/>
+                                                </div>
+                                                <div class="col-md-2 form-group">
+                                                    <a href="../controllers/usuarios.php?funcion=mostrarListado"><input class="btn btn-block btn-default" type="button" name="cancelar" value="Cancelar" /></a>
+                                                </div>
+                                            </div>
+                                            <input style="display:none" type="text" class="form-control" name="id_usuario" id="id_usuario" value="{{ id_usuario }}" />
+                                        </form>
+                                </div>
+                        </div>
+                    </div>
+
+                    {% block javascript %}
+                    <script>
+                        $('#tabla').DataTable({
+                            "language": {
+                                "lengthMenu": "Mostrando _MENU_ registros por página",
+                                "search": "Buscar",
+                                "zeroRecords": "Ningún registro coincide con lo ingresado",
+                                "info": "Mostrando página _PAGE_ de _PAGES_",
+                                "infoEmpty": "No hay resultados",
+                                "infoFiltered": "(de un total de _MAX_ total registros)"
+                            }
+                        });
+                    </script> 
+
+                    <script> 
+                            function comprobar(){
+                                if($('#borrar').val()== "BORRAR"){
+                                    $("#eliminar_usuario").prop( "disabled", false );
+                                }
+                                else{
+                                    $("#eliminar_usuario").prop( "disabled", true );
+                                }
+                            };
+                    </script>
+                    
+                    {% endblock %}
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
+
+</section>
+{% endblock %}

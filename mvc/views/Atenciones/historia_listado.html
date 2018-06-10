@@ -1,0 +1,75 @@
+{% extends 'Base/base.html' %}
+{% block title %}Historia clinica{% endblock %}
+{% block wrapper %}
+<section class="content-header">
+	<h1>
+		Historia clinica
+		<small>Listado</small>
+	</h1>
+	<ol class="breadcrumb">
+		<li><a href="index.php"><i class="fa fa-home"></i> Inicio</a></li>
+		<li class="active">Historia clinica</li>
+	</ol>
+</section>
+{% endblock %}
+
+{% block content %}
+<div class="box">
+    <div class="box-header">
+      	<h3 class="box-title">Historia Clinica - Listado de Personas</h3>
+	</div>
+
+	<div class="box-header text-center" {% if exito == '0' %} style="display:none" {% endif %}>
+		<h1><span class="label label-success">Historia Clinica modificada exitosamente.</span></h1>
+  	</div>
+    
+    <div class="box-body">
+      	<table id="tabla" class="table table-bordered table-striped">
+        	<thead>
+		        <tr>
+			        <th>Nombre y Apellido</th>
+			        <th>DNI</th>
+			        <th>Sexo</th>
+		            <th>Acciones</th>
+		        </tr>
+        	</thead>
+	        <tbody>
+				
+	        	{% for persona in personas %}
+				<tr>
+					
+			        <td>{{ persona.nombre }}</td>
+			        <td>{{ persona.numdoc }}</td>
+			        <td>{{ persona.sexo }}</td>
+
+                    <td><a class="btn btn-success" href="../controllers/historia.php?funcion=verMas&id_persona={{ persona.id_persona }}">Ver más</a></td>
+		        </tr>
+		        {% endfor %}
+				
+	        </tbody>
+      	</table>
+    </div>    
+</div>
+{% endblock %}
+
+{% block javascript %}
+<script>
+ 	$('#tabla').DataTable({
+ 		"language": {
+            "lengthMenu": "Mostrando _MENU_ registros por página",
+			"search": "Buscar",
+            "zeroRecords": "Ningún registro coincide con lo ingresado",
+            "info": "Mostrando página _PAGE_ de _PAGES_",
+            "infoEmpty": "No hay resultados",
+            "infoFiltered": "(de un total de _MAX_ total registros)",
+			"paginate": {
+				"previous": "Anterior",
+				"next": "Siguiente"
+			}
+        },
+		"columnDefs": [
+			{ "width": "5%", "targets": 3 }
+  		]
+ 	});
+</script>
+{% endblock %}

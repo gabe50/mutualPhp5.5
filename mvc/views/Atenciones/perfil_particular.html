@@ -1,0 +1,131 @@
+{% extends 'Base/base.html' %}
+{% block title %}Perfil particular{% endblock %}
+{% block wrapper %}
+    <section class="content-header">
+        <h1>
+            Atenciones
+            <small>Nueva Atención</small>
+        </h1>
+        <ol class="breadcrumb">
+            <li><a href="index.php"><i class="fa fa-home"></i> Inicio</a></li>
+            <li class="active">Nueva Atención</li>
+        </ol>
+    </section>
+{% endblock %}
+
+{% block content %}
+    <section class="content">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="nav-tabs-custom">
+                    <ul class="nav nav-tabs">
+                      <li class="active"><a href="#datos" data-toggle="tab">Datos Particular</a></li>
+                      <li><a href="#atenciones" data-toggle="tab">Atenciones</a></li>
+                    </ul>
+
+                    <div class="tab-content">
+                        <div class="active tab-pane" id="datos">
+                            <div class="post">
+                                {% for res in particular %}
+                                    <div class="box box-solid box-primary" >  
+                                        <div class="box-header">                                  
+                                            <div class="user-block">
+                                                {% if res.sexo == 1 %}
+                                                    <img class="img-circle img-bordered-sm" src="../../static/images/user.png" alt="user image">                 
+                                                {% else %}
+                                                    <img class="img-circle img-bordered-sm" src="../../static/images/user_fem.png" alt="user image">
+                                                {% endif %}
+                                                <span class="username">
+                                                  <h4 class="box-title"><b><a href="#">{{ res.nombre }}</a></b></h4>
+                                                </span>
+                                            </div>
+                                        </div>
+
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <div class="box-body">
+                                                    <p><label>Número de documento del particular :</label> {{ res.numdoc }}
+                                                    </p>
+                                                    {% if res.sexo == 1 %}
+                                                        <p><label>Sexo :</label> Masculino 
+														<label style="color:white">_______</label><label>edad : </label>{{ res.edad }}
+                                                        </p>                    
+                                                    {% else %}
+                                                        <p><label>Sexo :</label> Femenino 
+														<label style="color:white">_______</label><label>edad : </label>{{ res.edad }}
+                                                        </p> 
+                                                    {% endif %}
+                                                    <p><label>Fecha de nacimiento del particular : </label>{{ res.fecnacim }}
+                                                    </p>
+                                                    <p><label>Domicilio del titular : </label>{{ res.domicilio }}</p>
+
+                                                    <a class="btn btn-primary" href="../controllers/atenciones.php?funcion=mostrarFormularioParticular&id_persona={{ res.id_persona }}&cod_servicio={{ res.codigo }}">Generar Atención</a>                                        
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+  
+                        <div class="tab-pane" id="atenciones">
+                            <div class="box-body">
+                                <table id="tabla" class="table table-bordered table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th>Nombre y Apellido</th>
+                                            <th>Fecha inicio atención</th>
+											<th>Fecha fin atención</th>
+                                            <th>Diagnóstico</th>
+                                            <th>Estado</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {% if estado == '1' %}
+                                            {% for asistencia in asistencias %}
+                                                <tr>
+                                                    <td>{{ asistencia['nombre'] }}</td>
+                                                    <td>{{ asistencia['fec_pedido'] }} {{ asistencia['hora_pedido'] }}</td>
+                                                    <td>{{ asistencia['fec_ate'] }} {{ asistencia['hora_aten'] }}</td>
+													<td>{{ asistencia['diagnostico'] }}</td>
+                                                    {% if asistencia.fec_ate == '0000-00-00' %}
+														<td><span class="label label-warning">En progreso</span></td>
+													{% else %}
+														<td><span class="label label-success">Finalizada</span></td>
+													{% endif %}
+                                                </tr>
+                                            {% endfor %}
+                                        {% else %}
+                                            <div class="callout callout-danger lead">
+                                                <p>No se encontraron ASISTENCIAS REALIZADAS.</p>
+                                            </div>
+                                        {% endif %}                                        
+                                    </tbody>
+                                </table>
+                            </div>
+                            {% block javascript %}
+                                <script>
+                                    $('#tabla').DataTable({
+                                        "language": {
+                                            "lengthMenu": "Mostrando _MENU_ registros por página",
+                                            "search": "Buscar",
+                                            "zeroRecords": "Ningún registro coincide con lo ingresado",
+                                            "info": "Mostrando página _PAGE_ de _PAGES_",
+                                            "infoEmpty": "No hay resultados",
+                                            "infoFiltered": "(de un total de _MAX_ total registros)",
+                                            "paginate": {
+                                            "previous": "Anterior",
+                                            "next": "Siguiente"
+                                            }
+                                        }
+                                    });
+                                </script>
+                            {% endblock %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </section>
+{% endblock %}

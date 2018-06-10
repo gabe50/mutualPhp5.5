@@ -1,0 +1,87 @@
+{% extends 'Base/base.html' %}
+{% block title %}Listado de atenciones{% endblock %}
+{% block wrapper %}
+    <section class="content-header">
+        <h1>
+            Atenciones
+            <small>Listado Atención</small>
+        </h1>
+        <ol class="breadcrumb">
+            <li><a href="index.php"><i class="fa fa-home"></i> Home</a></li>
+            <li class="active">Listado Atención</li>
+        </ol>
+    </section>
+{% endblock %}
+
+{% block content %}
+<div class="box">
+    <div class="box-header">
+      	<h3 class="box-title">Listado de Atenciones</h3>
+    </div>
+    
+    <div class="box-body">
+      	<table id="tabla" class="table table-bordered table-striped">
+        	<thead>
+		        <tr>
+			        <th>Nro.</th>
+			        <th>Nombre y Apellido</th>
+			        <th>DNI</th>
+			        <th>Sexo</th>
+					<th>Fecha</th>
+		            <th>Estado</th>
+					<th>Acción</th>
+		        </tr>
+        	</thead>
+	        <tbody>
+		        
+				{% for res1 in asistencias %} 
+				<tr>
+					<td>{{ res1.nro }}</td>
+					<td>{{ res1.nombre }}</td>
+					<td>{{ res1.dni }}</td>
+					<td>{{ res1.sexo }}</td>
+					<td>{{ res1.fecha }}</td>
+					{% if res1.estado == '0' %}
+						<td><h4><span class="label label-warning">En progreso</span></h4></td>
+						<td>
+							<a class="btn btn-primary btn-sm" href="../controllers/listado_atencion.php?funcion=verMas&num_asist={{ res1.nro }}">Finalizar</a>
+							<a href="../controllers/atenciones.php?funcion=generarPDF&id_atencion={{ res1.nro }}" class="btn btn-danger btn-sm" target="_blank"><span class="glyphicon glyphicon-download-alt"></span>PDF</a>
+						</td>
+					{% else %}
+						<td><h4><span class="label label-success">Finalizada</span></h4></td>
+						<td></td>
+					{% endif %}
+				</tr>
+				{% endfor %}
+					
+	        </tbody>
+      	</table>
+    </div>    
+</div>
+{% endblock %}
+
+{% block javascript %}
+<script>
+ 	var tabla = $('#tabla').DataTable({
+ 		"language": {
+            "lengthMenu": "Mostrando _MENU_ registros por página",
+			"search": "Buscar",
+            "zeroRecords": "Ningún registro coincide con lo ingresado",
+            "info": "Mostrando página _PAGE_ de _PAGES_",
+            "infoEmpty": "No hay resultados",
+            "infoFiltered": "(de un total de _MAX_ total registros)",
+			"paginate": {
+				"previous": "Anterior",
+				"next": "Siguiente"
+			}
+        },
+		"columnDefs": [
+			{ "width": "10%", "targets": 6 }
+  		]
+ 	});
+	tabla
+    .column( '5:visible' )
+    .order( 'asc' )
+    .draw();
+</script>
+{% endblock %}

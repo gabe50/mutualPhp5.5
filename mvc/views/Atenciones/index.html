@@ -1,0 +1,170 @@
+{% extends 'Base/base.html' %}
+{% block title %}Inicio{% endblock %}
+{% block wrapper %}
+    <section class="content-header">
+        <h1>
+            Sistema de atenciones Mutual Fray Mamerto Esquiu
+        </h1>
+        <ol class="breadcrumb">
+            <li><a href="index.php"><i class="fa fa-home"></i> Inicio</a></li>
+        </ol>
+    </section>
+{% endblock %}
+
+{% block content %}
+
+<div class="box">
+    <div class="callout callout-info">
+        <h4>Bienvenido al sistema!</h4>
+
+        <p>Seleccione una opcion del menu de opciones.</p>
+      </div>
+    <div class="box-body">
+        <div class="row">
+            {% if priv.atenciones == '1' %}
+            <div class="col-lg-3 col-xs-6">
+            <!-- small box -->
+            <div class="small-box bg-aqua">
+                <div class="inner">
+                <h3>Atenciones</h3>
+    
+                </div>
+                <div class="icon">
+                <i class="fa fa-ambulance"></i>
+                </div>
+                <a href="../controllers/atenciones.php?funcion=mostrarListado" class="small-box-footer">
+                Nueva atención <i class="fa fa-arrow-circle-right"></i>
+                </a>
+            </div>
+            </div>
+            <!-- ./col -->
+            <div class="col-lg-3 col-xs-6">
+            <!-- small box -->
+            <div class="small-box bg-aqua">
+                <div class="inner">
+                <h3>Atenciones</h3>
+    
+                </div>
+                <div class="icon">
+                <i class="fa fa-list-alt"></i>
+                </div>
+                <a href="../controllers/listado_atencion.php?funcion=mostrarListado" class="small-box-footer">
+                Listado atenciones <i class="fa fa-arrow-circle-right"></i>
+                </a>
+            </div>
+            </div>
+            <!-- ./col -->
+            {% endif %}
+
+            {% if priv.usuarios == '1' %}
+            <div class="col-lg-3 col-xs-6">
+            <!-- small box -->
+            <div class="small-box bg-yellow">
+                <div class="inner">
+                <h3>Usuarios</h3>
+    
+                </div>
+                <div class="icon">
+                <i class="fa fa-users"></i>
+                </div>
+                <a href="../controllers/usuarios.php?funcion=mostrarListado" class="small-box-footer">
+                Listado usuarios <i class="fa fa-arrow-circle-right"></i>
+                </a>
+            </div>
+            </div>
+            <!-- ./col -->
+            {% endif %}
+
+            {% if priv.profesionales == '1' %}
+            <div class="col-lg-3 col-xs-6">
+            <!-- small box -->
+            <div class="small-box bg-yellow">
+                <div class="inner">
+                <h3>Profesionales</h3>
+    
+                </div>
+                <div class="icon">
+                <i class="fa fa-user-md"></i>
+                </div>
+                <a href="../controllers/profesionales.php?funcion=mostrarListado" class="small-box-footer">
+                Listado profesionales <i class="fa fa-arrow-circle-right"></i>
+                </a>
+            </div>
+            </div>
+            <!-- ./col -->
+            {% endif %}
+        </div>
+
+        <div class="row">
+                {% if priv.historia == '1' %}
+                <div class="col-lg-3 col-xs-6">
+                <!-- small box -->
+                <div class="small-box bg-green">
+                    <div class="inner">
+                    <h3>Historia clinica</h3>
+        
+                    </div>
+                    <div class="icon">
+                    <i class="fa fa-hospital-o"></i>
+                    </div>
+                    <a href="../controllers/historia.php?funcion=mostrarListado" class="small-box-footer">
+                    Historia clinica <i class="fa fa-arrow-circle-right"></i>
+                    </a>
+                </div>
+                </div>
+                <!-- ./col -->
+                {% endif %}
+                {% if priv.estadisticas == '1' %}
+                <div class="col-lg-3 col-xs-6">
+                <!-- small box -->
+                <div class="small-box bg-red">
+                    <div class="inner">
+                    <h3>Estadisticas</h3>
+        
+                    </div>
+                    <div class="icon">
+                    <i class="fa fa-bar-chart"></i>
+                    </div>
+                    <a href="../controllers/estadisticas.php?funcion=cantidadAtenciones" class="small-box-footer">
+                    Cantidad de atenciones <i class="fa fa-arrow-circle-right"></i>
+                    </a>
+                </div>
+                </div>
+                <!-- ./col -->
+                <div class="col-lg-3 col-xs-6">
+                <!-- small box -->
+                <div class="small-box bg-red">
+                    <div class="inner">
+                    <h3>Estadisticas</h3>
+        
+                    </div>
+                    <div class="icon">
+                    <i class="fa fa-bar-chart"></i>
+                    </div>
+                    <a href="../controllers/estadisticas.php?funcion=asociados" class="small-box-footer">
+                    Asistencias de asociados <i class="fa fa-arrow-circle-right"></i>
+                    </a>
+                </div>
+                </div>
+                <!-- ./col -->
+                <div class="col-lg-3 col-xs-6">
+                <!-- small box -->
+                <div class="small-box bg-red">
+                    <div class="inner">
+                    <h3>Estadisticas</h3>
+        
+                    </div>
+                    <div class="icon">
+                    <i class="fa fa-bar-chart"></i>
+                    </div>
+                    <a href="../controllers/estadisticas.php?funcion=horarios" class="small-box-footer">
+                    Horarios de mayor atención <i class="fa fa-arrow-circle-right"></i>
+                    </a>
+                </div>
+                </div>
+                <!-- ./col -->
+                {% endif %}
+            </div>
+    </div>    
+</div>
+{% endblock %}

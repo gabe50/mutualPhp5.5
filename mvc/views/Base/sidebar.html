@@ -1,0 +1,58 @@
+<aside class="main-sidebar">
+    <section class="sidebar">
+        <ul class="sidebar-menu">
+            <li class="header">Menú</li>
+
+            {% if priv.atenciones == '1' %}
+            <li class="treeview">
+                <a href="#">
+                    <i class="fa  fa-ambulance"></i>
+                    <span>Atenciones</span>
+                </a>
+                <ul class="treeview-menu">
+                    <li><a href="../controllers/atenciones.php?funcion=mostrarListado"><i class="fa fa-ambulance"></i> Nueva Atención</a></li>
+                    <li><a href="../controllers/listado_atencion.php?funcion=mostrarListado"><i class="fa fa-list-alt"></i> Listado Atenciones</a></li>
+                </ul>
+            </li>
+            {% endif %}
+            
+			{% if priv.estadisticas == '1' %}
+			<li class="treeview">
+                <a href="#">
+                    <i class="fa fa-bar-chart"></i>
+                    <span>Estadisticas</span>
+                </a>
+                <ul class="treeview-menu">
+                    <li><a href="../controllers/estadisticas.php?funcion=cantidadAtenciones"><i class="fa fa-bar-chart"></i>Cantidad de atenciones</a></li>
+                    <li><a href="../controllers/estadisticas.php?funcion=asociados"><i class="fa fa-bar-chart"></i>Asistencias de asociados</a></li>
+					<li><a href="../controllers/estadisticas.php?funcion=horarios"><i class="fa fa-bar-chart"></i>Horarios de mayor atención</a></li>
+                </ul>
+            </li>
+            {% endif %}
+            
+            {% if priv.usuarios == '1' %}
+			<li>
+                <a href="../controllers/usuarios.php?funcion=mostrarListado">
+                    <i class="fa fa-users"></i> <span>Listado usuarios</span>
+                </a>
+            </li>
+            {% endif %}
+
+            {% if priv.profesionales == '1' %}
+			<li>
+                <a href="../controllers/profesionales.php?funcion=mostrarListado">
+                    <i class="fa fa-user-md"></i> <span>Listado profesionales</span>
+                </a>
+            </li>
+            {% endif %}
+
+            {% if priv.historia == '1' %}
+			<li>
+                <a href="../controllers/historia.php?funcion=mostrarListado">
+                    <i class="fa fa-hospital-o"></i> <span>Historia Clinica</span>
+                </a>
+            </li>
+            {% endif %}
+        </ul>
+    </section>
+</aside>

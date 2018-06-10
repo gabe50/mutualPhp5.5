@@ -1,0 +1,34 @@
+{% extends 'Base/base.html' %}
+{% block title %}Atencion generada exitosamente{% endblock %}
+{% block wrapper %}
+    <section class="content-header">
+        <h1>
+            Atenciones
+            <small>Nueva Atención</small>
+        </h1>
+        <ol class="breadcrumb">
+            <li><a href="index.php"><i class="fa fa-home"></i> Inicio</a></li>
+            <li class="active">Nueva Atención</li>
+        </ol>
+    </section>
+{% endblock %}
+
+{% block content %}
+
+<div class="box">
+    <div class="box-header text-center">
+      	<h1><span class="label label-success">Atencion generada con exito</span></h1>
+    </div>
+	<div class="box-body">
+		<form action="../controllers/atenciones.php?funcion=generarPDF&id_atencion={{ id_atencion }}" method="post" target="_blank" >
+			
+			<div class="col-md-6 text-center">
+				<input class="btn btn-block btn-success" type="submit" name="enviar" value="Generar PDF"  />
+			</div>
+			<div class="col-md-6 text-center">
+				<a href="../controllers/listado_atencion.php?funcion=mostrarListado"><input class="btn btn-block btn-default" type="button" name="cancelar" value="Volver al listado" /></a>
+			</div>
+		</form>
+    </div>    
+</div>
+{% endblock %}

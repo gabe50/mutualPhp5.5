@@ -1,0 +1,201 @@
+{% extends 'Base/base.html' %} 
+{% block title %}Estadisticas horarios{% endblock %}
+{% block wrapper %}
+<section class="content-header">
+	<h1>
+		Estadisticas
+		<small>Horarios de mayor atención</small>
+	</h1>
+	<ol class="breadcrumb">
+		<li><a href="index.php"><i class="fa fa-home"></i> Inicio</a></li>
+		<li class="active">Estadisticas</li>
+	</ol>
+</section>
+{% endblock %} {% block content %}
+<div class="box">
+	<div class="row">
+		<div class="col-md-8 col-md-offset-2">
+			<h3 class="text-primary text-center">Estadisticas</h3>
+			<div class="box box-primary">
+				<div class="box-header with-border">
+					<br>
+					<h3 class="box-title">Horario en que se solicitan más atenciones</h3>
+					<br>
+					<br>
+					<span>Seleccione si desea visualizar la estadistica por año o por dia</span>
+					<br>
+					<br>
+
+					<div class="row">
+						<div class="col-md-6">
+							<div class="input-group date" data-provide="datepicker" data-date-format="yyyy-mm-dd" data-date-today-highlight="true" data-date-language='es'>
+								<input type="text" class="form-control" id="fecha" name="fecha">
+								<div class="input-group-addon">
+									<span class="glyphicon glyphicon-calendar"></span>
+								</div>
+							</div>
+						</div>
+						<div class="col-md-6">
+							<button class="btn btn-default" type="button" onclick="horariosAnio()">Estadistica por año</button>
+							<button class="btn btn-default" type="button" onclick="horariosMes()">Estadistica por mes</button>
+							<button class="btn btn-default" type="button" onclick="horariosDia()">Estadistica por dia</button>
+						</div>
+					</div>
+
+					<div class="box-tools pull-right">
+						<button class="btn btn-default" type="button" class="btn btn-box-tool" data-widget="collapse">
+							<i class="fa fa-minus"></i>
+						</button>
+						<button class="btn btn-default" type="button" class="btn btn-box-tool" data-widget="remove">
+							<i class="fa fa-times"></i>
+						</button>
+					</div>
+				</div>
+				<div class="box-body chart-responsive">
+					<div class="callout callout-danger lead" id="mensaje" style="display:none">
+						<p>No se encontraron datos</p>
+					</div>
+
+					<div class="chart" id="horario-estadisticas" style="height: 300px;"></div>
+				</div>
+			</div>
+
+			<label>DATOS</label>
+			</br>
+			<label>Total de atenciones: </label>
+			<p id="tot-atenciones"></p>
+			<label>Total de horarios en que se solicitaron atenciones: </label>
+			<br>
+			<p id="tot-horarios"></p>
+			<br>
+		</div>
+	</div>
+</div>
+{% endblock %} {% block javascript %}
+<script> 
+	function horariosAnio(){
+		var mes=00;
+		var dia=00;
+
+		if(!$("#fecha").val()){
+			$("#fecha").focus();
+			return;
+		}
+
+		var fecha= $("#fecha").val().split('-', 1);
+		var anio= fecha[0];
+		horarios(anio,mes,dia);
+	}
+	
+	function horariosMes(){
+		var dia=00;
+
+		if(!$("#fecha").val()){
+			$("#fecha").focus();
+			return;
+		}
+		var fecha= $("#fecha").val().split('-', 2);
+		var anio= fecha[0];
+		var mes= fecha[1];
+		horarios(anio,mes,dia);
+	}
+
+	function horariosDia(){
+
+		if(!$("#fecha").val()){
+			$("#fecha").focus();
+			return;
+		}
+
+		var fecha= $("#fecha").val().split('-', 3);
+		var anio= fecha[0];
+		var mes= fecha[1];
+		var dia= fecha[2];
+		horarios(anio,mes,dia);
+	}
+
+
+	function horarios(anio, mes, dia) {
+		$("#horario-estadisticas").empty();
+		var datos = {};
+
+		if (mes == 00 && dia == 00)
+			datos = { 'anio': anio };
+		else
+			if (dia == 00)
+				datos = { 'anio': anio, 'mes': mes };
+			else
+				datos = { 'anio': anio, 'mes': mes, 'dia': dia };
+
+		//Método POST de ajax para mandar:
+		//1.- El PHP donde se va a procesar todo que es estadisticas.php en horarioAtencionesProceso
+		//2.- El o los datos,
+		//3.- Luego se llama a una función una vez que se enviaron los datos y se obtuvo una respuesta
+		$.post("../controllers/estadisticas.php?funcion=horarioAtencionesProceso", datos).done(function (data) {
+			//Hacemos un parse para poder trabajar con la info enviada
+			var data = $.parseJSON(data);
+			
+
+			$("#mensaje").hide();
+			if(!data){
+				$("#mensaje").show();
+				$("#tot-atenciones").text("No se encontraron datos.");
+				$("#tot-horarios").text("No se encontraron datos.");
+				return;
+			}
+			//Creamos una variable que tendrá el total de las atenciones
+			var total_atenciones = 0;
+
+			//Información para manejar el bar_chart_data
+			bar_chart_data = [];
+
+			var tot_horarios = "";
+
+			//Recorremos para calcular el total de atenciones en el año y para rellenar la info del bar_chart_data
+			for (x = 0; x < data.length; x++) {
+				total_atenciones = total_atenciones + parseInt(data[x].cantidad);
+
+				var hora = "Hora: " + data[x].hora;
+				var cantidad = parseInt(data[x].cantidad);
+
+				tot_horarios = tot_horarios + " A las " + data[x].hora + " hs se solicitaron: " + cantidad + " de atenciones.<br>";
+
+				bar_chart_data[x] = {
+					hora: hora,
+					cantidad: cantidad
+				};
+			}
+
+			$("#tot-atenciones").text(total_atenciones);
+			//$("#tot-horarios").text(tot_horarios);
+			document.getElementById("tot-horarios").innerHTML=tot_horarios;
+
+			console.log(bar_chart_data);
+
+			var config = {
+				data: bar_chart_data,
+				xkey: 'hora',
+				ykeys: ['cantidad'],
+				labels: 'hora',
+				resize: true,
+				fillOpacity: 0.6,
+				behaveLikeLine: true,
+				hideHover: 'auto',
+				resize: true,
+				pointFillColors: ['#ffffff'],
+				pointStrokeColors: ['black'],
+				lineColors: ['gray', 'red']
+			}
+
+			config.element = 'horario-estadisticas';
+			config.stacked = true;
+			Morris.Bar(config);
+
+
+
+
+
+
+		});
+	}
+</script> {% endblock %}

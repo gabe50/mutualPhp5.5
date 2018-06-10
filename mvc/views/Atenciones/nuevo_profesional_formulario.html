@@ -1,0 +1,129 @@
+{% extends 'Base/base.html' %}
+{% block title %}Nuevo profesional{% endblock %}
+{% block wrapper %}
+    <section class="content-header">
+        <h1>
+            Profesionales
+            <small>Nuevo profesional</small>
+        </h1>
+        <ol class="breadcrumb">
+            <li><a href="index.php"><i class="fa fa-home"></i> Inicio</a></li>
+            <li class="active">Nuevo profesional</li>
+        </ol>
+    </section>
+{% endblock %}
+
+{% block content %}
+
+<div class="box">
+    <div class="box-header">
+      	<h3 class="box-title">Registro de profesionales (*Campos Obligatorios)</h3>
+    </div>
+    
+    <div class="box-body">
+      	<form action="../controllers/profesionales.php?funcion=registrarProfesional" method="post">
+			<fieldset><legend>Datos básicos</legend>
+				<div class="row">
+					<div class="col-md-6 form-group">
+						<label for="nombre">Nombre y apellido *</label><br/>
+						<input type="text" class="form-control" id="nombre" name="nombre" required maxlength="30"/>
+					</div>
+					
+					<div class="col-md-3 form-group">
+						<label for="doc">Número de documento *</label><br/>
+						<input type="text" class="form-control" id="doc" name="doc" required maxlength="8"/>
+					</div>
+					
+					<div class="col-md-3 form-group">
+						<label for="sexo">Sexo</label><br/>
+						<select class="selectpicker" name="sexo" id="sexo" required>
+						  <option value="M">Masculino</option>
+						  <option value="F">Femenino</option>
+						</select>
+					</div>
+
+					<div class="col-md-6 form-group">
+						<label for="fech_nac">Fecha de nacimiento *</label><br/>
+						<div class="input-group date" data-provide="datepicker" data-date-format="yyyy-mm-dd" data-date-today-highlight="true" data-date-language='es'>
+							<input type="text" class="form-control" id="fech_nac" name="fech_nac" required>
+							<div class="input-group-addon">
+								<span class="glyphicon glyphicon-calendar"></span>
+							</div>
+						</div>
+					</div>
+
+
+					<div class="col-md-3 form-group">
+						<label for="fijo">telefono fijo</label><br/>
+						<input type="text" class="form-control" id="fijo" name="fijo" maxlength="10"/>
+					</div>
+					
+					<div class="col-md-3 form-group">
+						<label for="celu">telefono celular</label><br/>
+						<input type="text" class="form-control" id="celu" name="celu" maxlength="15"/>
+					</div>
+					
+				</div>
+			</fieldset>
+			
+			<fieldset><legend>Domicilio</legend>
+				<div class="row">
+					<div class="col-md-6 form-group">
+						<label for="dom">Domicilio</label>
+						<input type="text" class="form-control" name="dom" id="dom" maxlength="40"/>
+					</div>
+					
+					<div class="col-md-6 form-group">
+						<label for="nrocasa">Numero de casa</label>
+						<input type="text" class="form-control" name="nrocasa" id="nrocasa" maxlength="4"/>
+					</div>
+					
+					<div class="col-md-6 form-group">
+						<label for="barrio">Barrio</label>
+						<input type="text" class="form-control" name="barrio" id="barrio" maxlength="50"/>
+					</div>
+					
+					<div class="col-md-6 form-group">
+						<label for="localidad">Localidad</label>
+						<input type="text" class="form-control" name="localidad" id="localidad" maxlength="50"/>
+					</div>
+					
+					<div class="col-md-6 form-group">
+						<label for="codpostal">Codigo postal</label>
+						<input type="text" class="form-control" name="codpostal" id="codpostal" maxlength="4"/>
+					</div>
+					
+					<div class="col-md-6 form-group">
+						<label for="dpto">Departamento</label>
+						<input type="text" class="form-control" name="dpto" id="dpto" maxlength="50"/>
+					</div>
+				</div>
+			</fieldset>
+			
+			<fieldset><legend>Datos del profesional</legend>
+				<div class="row">
+					<div class="col-md-6 form-group">
+						<label for="especialidad">Especialidad *</label>
+						<input type="text" class="form-control" name="especialidad" id="especialidad" required/>
+					</div>
+					
+					<div class="col-md-6 form-group">
+						<label for="matricula">Matricula *</label>
+						<input type="text" class="form-control" name="matricula" id="matricula" required/>
+					</div>
+				</div>
+			</fieldset>
+			
+			<div class="row"><br><br>
+				<div class="col-md-6">
+					<input class="btn btn-block btn-success" type="submit" name="registrar_profesional" value="Registrar profesional" />
+				</div>
+				<div class="col-md-6">
+					<a href="../controllers/profesionales.php?funcion=mostrarListado"><input class="btn btn-block btn-default" type="button" name="cancelar" value="Cancelar" /></a>
+				</div>
+			</div>
+
+		</form>
+    </div>    
+</div>
+{% endblock %}
