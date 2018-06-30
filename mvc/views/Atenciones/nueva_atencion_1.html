@@ -26,45 +26,11 @@
 			        <th>Nro.</th>
 			        <th>Nombre y Apellido</th>
 			        <th>DNI</th>
-			        <th>Sexo</th>
-		            <th>Acciones</th>
+					<th>Sexo</th>
+					<th>Acciones</th>
 		        </tr>
         	</thead>
-	        <tbody>
-				
-	        	{% for asociado in resultado %}
-				<tr>
-					
-			        <td>{{ asociado.numero_soc }}</td>
-			        <td>{{ asociado.nombre }}</td>
-			        <td>{{ asociado.numdoc }}</td>
-			        {% if asociado.sexo == 1 %}
-			        	<td>Masculino</td>
-			        {% else %}
-			        	<td>Femenino</td>
-			        {% endif %}
-                    <td><a class="btn btn-success" href="../controllers/atenciones.php?funcion=verMas&num_soc={{ asociado.numero_soc }}">Ver más</a></td>
-		            <!--<td><a class="btn btn-success" href="../controllers/atenciones.php?funcion=mostrarFormulario&numeral=3">Ver más</a></td>-->
-		        </tr>
-		        {% endfor %}
-				
-				{% for particular in resultado_particulares %}
-				<tr>
-					
-			        <td></td>
-			        <td>{{ particular.nombre }}</td>
-			        <td>{{ particular.documento }}</td>
-			        {% if particular.sexo == 1 %}
-			        	<td>Masculino</td>
-			        {% else %}
-			        	<td>Femenino</td>
-			        {% endif %}
-                    <td><a class="btn btn-success" href="../controllers/atenciones.php?funcion=verMasParticular&persona={{ particular.id_persona }}">Ver más</a></td>
-		            <!--<td><a class="btn btn-success" href="../controllers/atenciones.php?funcion=mostrarFormulario&numeral=3">Ver más</a></td>-->
-		        </tr>
-		        {% endfor %}
-
-	        </tbody>
+			
       	</table>
     </div>    
 </div>
@@ -72,7 +38,32 @@
 
 {% block javascript %}
 <script>
- 	$('#tabla').DataTable({
+	$(document).on("ready", function(){
+		listar();
+	})
+ 	var listar= function(){
+		 $('#tabla').DataTable({
+			"ajax": {
+			"method":"POST",
+			"url":"../api/prueba.php"},
+  		"columns": [
+			  {"data":"numero_soc"},
+			  {"data":"nombre"},
+			  {"data":"numdoc"},
+			  {"data":"sexo",
+			  "render": function(data, type, row, meta){
+				  if(data=='1')
+					return	'Masculino'
+					else
+					return 'femenino'
+				}
+			  },
+			  {"data":"numero_soc",
+				  "render": function(data, type, row, meta){
+					return	data = '<a class="btn btn-success" href=../controllers/atenciones.php?funcion=verMas&num_soc=' + data + '>Ver más</a>';
+				}
+			  }
+		  ],
  		"language": {
             "lengthMenu": "Mostrando _MENU_ registros por página",
 			"search": "Buscar",
@@ -88,6 +79,8 @@
 		"columnDefs": [
 			{ "width": "5%", "targets": 4 }
   		]
+		
  	});
+	 }
 </script>
 {% endblock %}

@@ -91,8 +91,9 @@
                                                 <p><label>Plan: </label> {{ res2.nombreplan }} </p>
 												
 												<!-- Este es el botón nuevo, envía el número de socio y el código que saca de fme_adhsrv por ser PAGO POR CUOTA -->
-												<a class="btn btn-primary" href="../controllers/atenciones.php?funcion=mostrarFormulario&num_soc={{ res2.numero_soc }}&cod_servicio={{ res2.codigo}}">Generar Atención</a>
-												
+                                                {% if res2.codigo == '3' %}
+                                                <a class="btn btn-primary" href="../controllers/atenciones.php?funcion=mostrarFormulario&num_soc={{ res2.numero_soc }}&cod_servicio={{ res2.codigo}}">Generar Atención</a>
+												{% endif %}
                                             </div>
                                         </div>
     								{% endfor %}
@@ -117,8 +118,14 @@
                                         <div class="box-body">  
                                             <p><label>Plan: </label>{{ res22.nombreplan }} </p>
 											
-											<!-- Este es el segundo botón nuevo, envía el número de socio y el código que saca de tar_srvadherentes por ser PAGO POR TARJETA -->
-											<a class="btn btn-primary" href="../controllers/atenciones.php?funcion=mostrarFormulario&num_soc={{ res22.numero_soc }}&cod_servicio={{ res22.codigo}}">Generar Atención</a>
+                                            <!-- Este es el segundo botón nuevo, envía el número de socio y el código que saca de tar_srvadherentes por ser PAGO POR TARJETA -->
+                                            {% if res22.codigo == '3' %}
+                                                <a class="btn btn-primary" href="../controllers/atenciones.php?funcion=mostrarFormulario&num_soc={{ res22.numero_soc }}&cod_servicio={{ res22.codigo}}">Generar Atención</a>
+                                            {% endif %}
+                                            {% if res22.codigo == '48' %}
+                                                <a class="btn btn-primary" href="../controllers/atenciones.php?funcion=mostrarFormulario&num_soc={{ res22.numero_soc }}&cod_servicio={{ res22.codigo}}">Generar Atención</a>
+                                            {% endif %}
+											
 												
                                         </div>
                                     </div>								

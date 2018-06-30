@@ -27,6 +27,9 @@
 			if (!$this->dbConn = mysqli_connect($this->host,$this->dbUser,$this->dbPass,$this->dbName)) {
 				$this->errorMsg = 'Could not connect to server';
 				$this->connectError = true;
+			}
+			if (!mysqli_set_charset($this->dbConn, "utf8")) {
+				printf("Error cargando el conjunto de caracteres utf8: %s\n", mysqli_error($this->dbConn));
 			} 
 		}
 		

@@ -155,8 +155,10 @@ function verMas()
 									   WHERE socios.soc_titula = '$numero_socio' 
 									   AND socios.id_persona = persona.id_persona
                                        AND socios.numero_soc= socios.soc_titula
+									   AND tar_srvadherentes.estado = 1
 									   AND tar_srvadherentes.socnumero = socios.soc_titula 
-									   AND tar_srvadherentes.codigo = tar_srv.codigo");
+									   AND tar_srvadherentes.codigo = tar_srv.codigo
+									   AND tar_srvadherentes.tipo = 1");
 			
 			if(!$resultadoTitularServicios2)
 				$estado[1]='0';
@@ -189,8 +191,9 @@ function verMas()
 									   FROM socios,persona,tar_srv, tar_srvadherentes 
 									   WHERE socios.soc_titula = '$numero_socio'
 									   AND socios.numero_soc != socios.soc_titula
+									   AND tar_srvadherentes.estado = 1
 									   AND socios.id_persona = persona.id_persona
-									   AND tar_srvadherentes.socnumero = socios.numero_soc 
+									   AND tar_srvadherentes.socnumero = socios.soc_titula 
 									   AND tar_srvadherentes.codigo = tar_srv.codigo");	
 
 			
@@ -936,7 +939,7 @@ function generarPDF()
 		$check = "4"; else $check = "";
 		$pdf->Cell(10, 10, $check, 1, 0);	
 	
-	if($fec_ate=='0000-00-00'){
+	if($fec_ate==NULL){
 		$pdf->Image('../../static/images/back.png','0','0','595','841','PNG');
 	}
 	else{

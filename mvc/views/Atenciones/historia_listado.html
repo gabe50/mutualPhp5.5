@@ -33,20 +33,6 @@
 		            <th>Acciones</th>
 		        </tr>
         	</thead>
-	        <tbody>
-				
-	        	{% for persona in personas %}
-				<tr>
-					
-			        <td>{{ persona.nombre }}</td>
-			        <td>{{ persona.numdoc }}</td>
-			        <td>{{ persona.sexo }}</td>
-
-                    <td><a class="btn btn-success" href="../controllers/historia.php?funcion=verMas&id_persona={{ persona.id_persona }}">Ver más</a></td>
-		        </tr>
-		        {% endfor %}
-				
-	        </tbody>
       	</table>
     </div>    
 </div>
@@ -55,6 +41,26 @@
 {% block javascript %}
 <script>
  	$('#tabla').DataTable({
+		"ajax": {
+			"method":"POST",
+			"url":"../api/pruebapersonas.php"},
+  		"columns": [
+			  {"data":"nombre"},
+			  {"data":"numdoc"},
+			  {"data":"sexo",
+			  "render": function(data, type, row, meta){
+				  if(data=='1')
+					return	'Masculino'
+					else
+					return 'femenino'
+				}
+			  },
+			  {"data":"id_persona",
+				  "render": function(data, type, row, meta){
+					return	data = '<a class="btn btn-success" href=../controllers/historia.php?funcion=verMas&id_persona=' + data + '>Ver más</a>';
+				}
+			  }
+		  ],
  		"language": {
             "lengthMenu": "Mostrando _MENU_ registros por página",
 			"search": "Buscar",
