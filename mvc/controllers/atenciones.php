@@ -52,7 +52,7 @@ function mostrarListado(){
 							
 	$resultado_particulares = $GLOBALS['db']->select('SELECT fme_adhsrv.nombre, fme_adhsrv.documento, persona.sexo, fme_adhsrv.id_persona 
 								FROM fme_adhsrv, persona 
-								WHERE fme_adhsrv.codigo=021 
+								WHERE fme_adhsrv.socnumero>=100000 
 								AND persona.id_persona=fme_adhsrv.id_persona;');		
 								
 	if($resultado || $resultado_particulares)
@@ -68,6 +68,24 @@ function mostrarListado(){
 					];
 			echo $GLOBALS['twig']->render('/Atenciones/error.html', compact('error','use','priv'));	
 	}
+}
+
+function mostrarListadoAjax(){
+	$resultado = $GLOBALS['db']->select('SELECT socios.beneficio,socios.soc_titula,socios.numero_soc,persona.sexo,persona.nombre,persona.numdoc 
+	FROM socios, persona 
+	WHERE socios.soc_titula=socios.numero_soc 
+	AND persona.id_persona=socios.id_persona;');
+
+	$resultado_particulares = $GLOBALS['db']->select('SELECT fme_adhsrv.socnumero as numero_soc, fme_adhsrv.nombre, persona.numdoc, persona.sexo, fme_adhsrv.id_persona
+	FROM fme_adhsrv, persona 
+	WHERE fme_adhsrv.socnumero>=100000 
+	AND persona.id_persona=fme_adhsrv.id_persona;');
+
+	$asociados = array_merge($resultado, $resultado_particulares);
+
+	$arreglo["data"]=$asociados;
+
+	echo json_encode($arreglo);
 }
 
 		
@@ -245,13 +263,12 @@ function verMasParticular()
 			global $priv;
 			//---------------CONSULTA QUE DEVUELVE TODA LA INFO DEL PARTICULAR----------------
 			
-			$id_persona = $_GET['persona']; //Es el número del particular
+			$num_soc = $_GET['num_soc']; //Es el número del particular
 			
 			$particular = $GLOBALS['db']->select("SELECT fme_adhsrv.id_persona, fme_adhsrv.codigo, persona.nombre, persona.sexo,persona.fecnacim, 
 			persona.domicilio,persona.casa_nro,persona.barrio,persona.localidad,persona.codpostal
 			FROM persona, fme_adhsrv
-			WHERE persona.id_persona='$id_persona'
-			AND fme_adhsrv.codigo=021 
+			WHERE fme_adhsrv.socnumero='$num_soc'
 			AND fme_adhsrv.id_persona=persona.id_persona");
 
 			
@@ -260,7 +277,7 @@ function verMasParticular()
 				$error=[
 				'menu'			=>"Atenciones",
 				'funcion'		=>"verMas",
-				'descripcion'	=>"No se encuentra al particular $id_persona"
+				'descripcion'	=>"No se encuentra al particular $num_soc"
 				];
 				echo $GLOBALS['twig']->render('/Atenciones/error.html', compact('error','use','priv'));	
 				return;
@@ -282,7 +299,7 @@ function verMasParticular()
 									  sigssaludfme_asistencia.sintomas, sigssaludfme_asistencia.diagnostico, sigssaludfme_asistencia.tratamiento, sigssaludfme_asistencia.hora_aten,
 									  sigssaludfme_asistencia.profesional
 									  FROM sigssaludfme_asistencia, persona, fme_adhsrv
-									  WHERE persona.id_persona='$id_persona'
+									  WHERE fme_adhsrv.socnumero='$num_soc'
 									  AND persona.numdoc = sigssaludfme_asistencia.numdoc
 									  AND fme_adhsrv.codigo=021 ");
 			

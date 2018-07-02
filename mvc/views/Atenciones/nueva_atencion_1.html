@@ -45,7 +45,7 @@
 		 $('#tabla').DataTable({
 			"ajax": {
 			"method":"POST",
-			"url":"../api/prueba.php"},
+			"url":"../controllers/atenciones.php?funcion=mostrarListadoAjax"},
   		"columns": [
 			  {"data":"numero_soc"},
 			  {"data":"nombre"},
@@ -60,7 +60,10 @@
 			  },
 			  {"data":"numero_soc",
 				  "render": function(data, type, row, meta){
-					return	data = '<a class="btn btn-success" href=../controllers/atenciones.php?funcion=verMas&num_soc=' + data + '>Ver más</a>';
+					  if(data>=100000)
+						return	data = '<a class="btn btn-success" href=../controllers/atenciones.php?funcion=verMasParticular&num_soc=' + data + '>Ver más</a>';
+					else
+						return	data = '<a class="btn btn-success" href=../controllers/atenciones.php?funcion=verMas&num_soc=' + data + '>Ver más</a>';
 				}
 			  }
 		  ],

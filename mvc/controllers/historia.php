@@ -43,21 +43,11 @@ function mostrarListado(){
 	$personas = $GLOBALS['db']->select('SELECT * FROM persona');								
 	if($personas)
 	{
-		$i=0;
-		foreach($personas as $res){
-			if($res['sexo']==1){
-				$personas[$i]['sexo']='Masculino';
-			}
-			else{
-				$personas[$i]['sexo']='Femenino';
-			}
-			$i++;
-		}
 		$exito=0;
 		if(isset($_GET['exito'])){
 			$exito=1;
 		}
-		echo $GLOBALS['twig']->render('/Atenciones/historia_listado.html', compact('personas','exito','use','priv'));
+		echo $GLOBALS['twig']->render('/Atenciones/historia_listado.html', compact('exito','use','priv'));
 	}
 	else
 	{
@@ -68,6 +58,14 @@ function mostrarListado(){
 				];
 		echo $GLOBALS['twig']->render('/Atenciones/error.html', compact('error','use','priv'));	
 	}
+}
+
+function mostrarListadoAjax(){
+	$resultado = $GLOBALS['db']->select('SELECT * FROM persona');
+
+	$arreglo["data"]=$resultado;
+
+	echo json_encode($arreglo);
 }
 
 function verMas(){
