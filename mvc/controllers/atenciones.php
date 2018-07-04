@@ -81,7 +81,11 @@ function mostrarListadoAjax(){
 	WHERE fme_adhsrv.socnumero>=100000 
 	AND persona.id_persona=fme_adhsrv.id_persona;');
 
-	$asociados = array_merge($resultado, $resultado_particulares);
+	$asociados = array();
+	if(is_array($resultado))
+		$asociados = array_merge($asociados, $resultado);
+	if(is_array($resultado_particulares ))
+		$asociados = array_merge($asociados, $resultado_particulares);
 
 	$arreglo["data"]=$asociados;
 

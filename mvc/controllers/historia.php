@@ -39,29 +39,17 @@
 	
 function mostrarListado(){
 	global $use;
-	global $priv;
-	$personas = $GLOBALS['db']->select('SELECT * FROM persona');								
-	if($personas)
-	{
-		$exito=0;
-		if(isset($_GET['exito'])){
-			$exito=1;
-		}
-		echo $GLOBALS['twig']->render('/Atenciones/historia_listado.html', compact('exito','use','priv'));
+	global $priv;								
+	$exito=0;
+	if(isset($_GET['exito'])){
+		$exito=1;
 	}
-	else
-	{
-		$error=[
-				'menu'			=>"Historia Clinica",
-				'funcion'		=>"Listado de personas",
-				'descripcion'	=>"No se encontraron resultados."
-				];
-		echo $GLOBALS['twig']->render('/Atenciones/error.html', compact('error','use','priv'));	
-	}
+	echo $GLOBALS['twig']->render('/Atenciones/historia_listado.html', compact('exito','use','priv'));
+	
 }
 
 function mostrarListadoAjax(){
-	$resultado = $GLOBALS['db']->select('SELECT * FROM persona');
+	$resultado = $GLOBALS['db']->select('SELECT nombre, numdoc, sexo, id_persona FROM persona');
 
 	$arreglo["data"]=$resultado;
 

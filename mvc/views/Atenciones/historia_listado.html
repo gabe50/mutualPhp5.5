@@ -41,6 +41,7 @@
 {% block javascript %}
 <script>
  	$('#tabla').DataTable({
+		processing: true,
 		"ajax": {
 			"method":"POST",
 			"url":"../controllers/historia.php?funcion=mostrarListadoAjax"},
@@ -62,6 +63,8 @@
 			  }
 		  ],
  		"language": {
+			"loadingRecords": "&nbsp;",
+      		"processing": "Cargando...",
             "lengthMenu": "Mostrando _MENU_ registros por página",
 			"search": "Buscar",
             "zeroRecords": "Ningún registro coincide con lo ingresado",
