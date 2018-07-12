@@ -1,5 +1,5 @@
 {% extends 'Base/base.html' %}
-{% block title %}Nueva atencion{% endblock %}
+{% block title %}Nueva atención{% endblock %}
 {% block wrapper %}
     <section class="content-header">
         <h1>
@@ -7,7 +7,7 @@
             <small>Nueva Atención</small>
         </h1>
         <ol class="breadcrumb">
-            <li><a href="index.php"><i class="fa fa-home"></i> inicio</a></li>
+            <li><a href="index.php"><i class="fa fa-home"></i> Inicio</a></li>
             <li class="active">Nueva Atención</li>
         </ol>
     </section>
@@ -29,14 +29,9 @@
 						<input type="text" class="form-control" id="nombre" name="nombre" readonly value="{{ persona.nombre }}"/>
 					</div>
 
-					<div class="col-md-3 form-group">
-						<label for="doc">Documento del asociado</label><br/>
+					<div class="col-md-6 form-group">
+						<label for="doc">Documento de la persona</label><br/>
 						<input type="text" class="form-control" id="doc" name="doc" readonly value="{{ persona.doc }}"/>
-					</div>
-
-					<div class="col-md-3 form-group">
-						<label for="doctit">Documento del titular</label><br/>
-						<input type="text" class="form-control" id="doctit" name="doctit" readonly value="{{ persona.doctit }}"/>
 					</div>
 
 				</div>
@@ -58,14 +53,9 @@
 						<input type="text" class="form-control" id="sexo" name="sexo" readonly value="{% if persona.sexo == 1 %}Masculino{% else %}Femenino{% endif %}"/>
 					</div>
 
-					<div class="col-md-3 form-group">
+					<div class="col-md-6 form-group">
 						<label for="tel">telefono de contacto</label><br/>
 						<input type="text" class="form-control" id="tel" name="tel" readonly value="FIJO: {% if persona.tel == null %}-{% endif %}{{ persona.tel }} // CEL: {% if persona.cel == null %}-{% endif %}{{ persona.cel }}"/>
-					</div>
-
-					<div class="col-md-3 form-group">
-						<label for="nro">Numero de asociado</label><br/>
-						<input type="text" class="form-control" id="nro" name="nro" readonly value="{{ persona.nro }}"/>
 					</div>
 				</div>
 			</fieldset>
@@ -104,7 +94,7 @@
 				</div>
 			</fieldset>
 			
-			<fieldset><legend>Enfermedades padecidas</legend>
+						<fieldset><legend>Enfermedades padecidas</legend>
 				<div class="row">
 					<div class="col-md-4 form-group">
 						<label><input type="checkbox" name="paperas" id="paperas" {% if historia.paperas == 1 %}checked{% else %}{% endif %} disabled>Paperas</label>
@@ -168,7 +158,7 @@
 				<div class="row">
 					<div class="col-md-6 form-group">
 						<label for="prof">Profesional</label>
-						<select class="select2 form-control" style="width: 100%;" id="prof" name="prof" required>
+						<select class="select2 form-control" style="width: 100%;" id="prof" name="prof">
 							{% for profesional in profesionales %}
 								<option value="{{ profesional.nombre }}|{{ profesional.id_profesional }}">{{ profesional.nombre }} | {{ profesional.especialidad }} | {{ profesional.matricula }}</option>
 							{% endfor %}
@@ -178,7 +168,7 @@
 				
 				<div class="form-group">
 					<label for="desc">Descripción de la situación *</label><br/>
-					<textarea type="text" class="form-control" id="desc" name="desc" rows="5" placeholder="Describe la situacion.." required maxlength="70"/></textarea>
+					<textarea type="text" class="form-control" id="desc" name="desc" rows="5" placeholder="Describe la situacion.." required/ maxlength="70"></textarea>
 				</div>
 			</fieldset>
 

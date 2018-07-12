@@ -19,16 +19,15 @@
             <div class="col-md-12">
                 <div class="nav-tabs-custom">
                     <ul class="nav nav-tabs">
-                      <li class="active"><a href="#datos" data-toggle="tab">Datos Titular</a></li>
-                      <li><a href="#planes-titular" data-toggle="tab">Planes del titular</a></li>
-                      <li><a href="#planes-adherentes" data-toggle="tab">Planes de los adherentes</a></li>
+                      <li class="active"><a href="#datos" data-toggle="tab">Datos Basicos</a></li>
+                      <li><a href="#planes" data-toggle="tab">Planes</a></li>
                       <li><a href="#atenciones" data-toggle="tab">Atenciones</a></li>
                     </ul>
 
                     <div class="tab-content">
                         <div class="active tab-pane" id="datos">
                             <div class="post">
-                                {% for res in resultadoTitular %}
+                                {% for res in datos_basicos %}
                                     <div class="box box-solid box-primary" >  
                                         <div class="box-header">                                  
                                             <div class="user-block">
@@ -60,11 +59,6 @@
                                                     <p><label>Fecha de nacimiento del titular : </label>{{ res.fecnacim }}
                                                     </p>
                                                     <p><label>Domicilio del titular : </label>{{ res.domicilio }}</p>
-                                                    <div class="box box-primary"></div>
-                                                    <p><label>Número de beneficio del titular : </label>{{ res.beneficio }}
-                                                    </p>
-                                                    <p><label>Número de socio : </label>{{ res.numero_soc }}
-                                                    </p>
                                                 </div>
                                             </div>
                                         </div>
@@ -73,129 +67,55 @@
                             </div>
                         </div>
     					
-    					<div class="tab-pane" id="planes-titular">
-                            <div class="box box-primary">
-                                <div class="box-header">
-                                    <h3 class="box-title">PAGO POR CUOTA</h3>
+    					<div class="tab-pane" id="planes">
+                            
+                            {% if datos_servicios is not null %}
+                                <div class="box box-primary">
+                                    <div class="box-header">
+                                        <h3 class="box-title">PAGO POR CUOTA</h3>
+                                    </div>
                                 </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-md-12">
-                                {% if estado[0] == '1' %}
-    								{% for res2 in resultadoTitularServicios1 %}
+                                <div class="row">
+                                    <div class="col-md-12">
+                                    {% for res2 in datos_servicios %}
                                         <div class="box box-solid box-primary" >
                                             <div class="box-header">
-                                                <h3 class="box-title">Titular </h3>
+                                                <h3 class="box-title">{{ res2.nombre }} </h3>
                                             </div>
                                             <div class="box-body">
-                                                <p><label>Plan: </label> {{ res2.nombreplan }} </p>
-												
-												<!-- Este es el botón nuevo, envía el número de socio y el código que saca de fme_adhsrv por ser PAGO POR CUOTA -->
-                                                {% if res2.codigo == '3' %}
-                                                <a class="btn btn-primary" href="../controllers/atenciones.php?funcion=mostrarFormulario&num_soc={{ res2.numero_soc }}&cod_servicio={{ res2.codigo}}">Generar Atención</a>
-												{% endif %}
+                                                {% if res2.codigo == 020 or res2.codigo == 884 %}
+                                                <a class="btn btn-primary" href="../controllers/atenciones.php?funcion=mostrarFormulario&num_doc={{ datos_basicos.0.numdoc }}">Generar Atención</a>
+                                                {% endif %}
                                             </div>
                                         </div>
-    								{% endfor %}
-    							{% else %}
-    								<div class="callout callout-danger lead">
-                                    <p>No se encontraron PLANES.</p>
-                                </div>
-    							{% endif %}
-                                </div>
-                            </div>
-                            <div class="box box-danger">
-                                <div class="box-header">
-                                    <h3 class="box-title">PAGO POR TARJETA</h3>
-                                </div>
-                            </div> 
-    						{% if estado[1] == '1' %}
-    							{% for res22 in resultadoTitularServicios2 %}
-                                    <div class="box box-solid box-primary" >
-                                        <div class="box-header">
-                                            <h3 class="box-title">TITULAR</h3>
-                                        </div>
-                                        <div class="box-body">  
-                                            <p><label>Plan: </label>{{ res22.nombreplan }} </p>
-											
-                                            <!-- Este es el segundo botón nuevo, envía el número de socio y el código que saca de tar_srvadherentes por ser PAGO POR TARJETA -->
-                                            {% if res22.codigo == '3' %}
-                                                <a class="btn btn-primary" href="../controllers/atenciones.php?funcion=mostrarFormulario&num_soc={{ res22.numero_soc }}&cod_servicio={{ res22.codigo}}">Generar Atención</a>
-                                            {% endif %}
-                                            {% if res22.codigo == '48' %}
-                                                <a class="btn btn-primary" href="../controllers/atenciones.php?funcion=mostrarFormulario&num_soc={{ res22.numero_soc }}&cod_servicio={{ res22.codigo}}">Generar Atención</a>
-                                            {% endif %}
-											
-												
-                                        </div>
-                                    </div>								
-    							{% endfor %}
-    						{% else %}
-    							<div class="callout callout-danger lead">
-                                    <p>No se encontraron PLANES.</p>
-                                </div>
-    						{% endif %}
-
-                        </div>
-
-                        <div class="tab-pane" id="planes-adherentes">
-                            <div class="box box-primary">
-                                <div class="box-header">
-                                    <h3 class="box-title">PAGO POR CUOTA</h3>
-                                </div>
-                            </div>
-    						{% if estado[2] == '1' %}
-    							{% for res3 in resultadoAdherentes1 %}                                
-    								<div class="box box-solid box-primary" >
-    									<div class="box-header">
-    										<h3 class="box-title">Nombre del adherente: {{ res3['nombre'] }} </h3>
-                                        </div>
-    									<div class="box-body">
-    									   <p> Relación que guarda con el titular: {{ res3['parentesco'] }} </p>
-    									   <p> Plan del adherente: {{ res3['nombreplan'] }} </p>
-    									   <p> Número de socio del adherente: {{ res3['numero_soc'] }} </p>
-    									   <p> Número de beneficio del adherente: {{ res3['beneficio'] }} </p>
-    									   
-                                           <a class="btn btn-primary" href="../controllers/atenciones.php?funcion=mostrarFormulario&num_soc={{ res3.numero_soc }}&cod_servicio={{ res3.codigo}}">Generar Atención</a>
-                                           
-
-
-                                        </div>
+                                    {% endfor %}
                                     </div>
-    						   {% endfor %}
-    						{% else %}
-    							<div class="callout callout-danger lead">
-                                    <p>No se encontraron ADHERENTES.</p>
                                 </div>
-    						{% endif %}
-       
-
-                            <div class="box box-danger">
-                                <div class="box-header">
-                                    <h3 class="box-title">PAGO POR TARJETA</h3>
+                            {% endif %}
+                            {% if datos_servicios_tarjeta is not null %}
+                                <div class="box box-success">
+                                    <div class="box-header">
+                                        <h3 class="box-title">PAGO POR TARJETA</h3>
+                                    </div>
                                 </div>
-                            </div>                       
-    						{% if estado[3] == '1' %}
-    							{% for res4 in resultadoAdherentes2 %}
-    								<div class="box box-solid box-danger" >
-    									<div class="box-header">
-    										<h3 class="box-title">Nombre del adherente: {{ res4['nombre'] }}</h3>
-    									</div>
-    									<div class="box-body">  
-    										<p> Relación que guarda con el titular: {{ res4['parentesco'] }} </p>
-    										<p> Plan del adherente: {{ res4['nombreplan'] }} </p>
-    										<p> Número de socio del adherente: {{ res4['numero_soc'] }} </p>
-    										<p> Nro de beneficio del adherente: {{ res4['beneficio'] }} </p>
-
-                                            <a class="btn btn-danger" href="../controllers/atenciones.php?funcion=mostrarFormulario&num_soc={{ res4.numero_soc }}&cod_servicio={{ res4.codigo}}">Generar Atención</a>  
+                                <div class="row">
+                                    <div class="col-md-12">
+                                    {% for res2 in datos_servicios_tarjeta %}
+                                        <div class="box box-solid box-success" >
+                                            <div class="box-header">
+                                                <h3 class="box-title">{{ res2.nombre }} </h3>
+                                            </div>
+                                            <div class="box-body">
+                                                {% if res2.codigo == 3 or res2.codigo == 48 %}
+                                                <a class="btn btn-primary" href="../controllers/atenciones.php?funcion=mostrarFormulario&num_doc={{ datos_basicos.0.numdoc }}">Generar Atención</a>
+                                                {% endif %}
+                                            </div>
                                         </div>
-    								</div>
-    							{% endfor %}
-    						{% else %}
-                                <div class="callout callout-danger lead">
-                                    <p>No se encontraron ADHERENTES.</p>
+                                    {% endfor %}
+                                    </div>
                                 </div>
-    						{% endif %}
+                            {% endif %}
+                        
                         </div>
 
                         <div class="tab-pane" id="atenciones">
@@ -211,8 +131,7 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        {% if estado[4] == '1' %}
-                                            {% for asistencia in asistencias %}
+                                        {% for asistencia in datos_atenciones %}
                                                 <tr>
                                                     <td>{{ asistencia['nombre'] }}</td>
                                                     <td>{{ asistencia['fec_pedido'] }} {{ asistencia['hora_pedido'] }}</td>
@@ -231,12 +150,7 @@
 														<td><span class="label label-success">Finalizada</span></td>
 													{% endif %}
                                                 </tr>
-                                            {% endfor %}
-                                        {% else %}
-                                            <div class="callout callout-danger lead">
-                                                <p>No se encontraron ASISTENCIAS REALIZADAS.</p>
-                                            </div>
-                                        {% endif %}                                        
+                                        {% endfor %}                                       
                                     </tbody>
                                 </table>
                             </div>

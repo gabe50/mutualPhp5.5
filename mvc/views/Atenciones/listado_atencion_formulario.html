@@ -42,25 +42,10 @@
 								<input type="text" class="form-control" id="nombre" name="nombre" readonly value="{{ persona.nombre }}"/>
 							</div>
 							
-							{% if persona.cod_serv == '020' %}
 							<div class="col-md-3 form-group">
-								<label for="doc">Documento del asociado</label><br/>
+								<label for="doc">Documento de la persona</label><br/>
 								<input type="text" class="form-control" id="doc" name="doc" readonly value="{{ persona.doc }}"/>
 							</div>
-							
-							
-							<div class="col-md-3 form-group">
-								<label for="doctit">Documento del titular</label><br/>
-								<input type="text" class="form-control" id="doctit" name="doctit" readonly value="{{ persona.doctit }}"/>
-							</div>
-							{% endif %}
-							
-							{% if persona.cod_serv == '021' %}
-							<div class="col-md-3 form-group">
-								<label for="doc">Documento del particular</label><br/>
-								<input type="text" class="form-control" id="doc" name="doc" readonly value="{{ persona.doc }}"/>
-							</div>
-							{% endif %}
 
 						</div>
 						<div class="row">
@@ -275,13 +260,8 @@
 							</div>
 							
 							<div class="col-md-4 form-group">
-								<label for="doc">Documento del asociado</label><br/>
+								<label for="doc">Documento de la persona</label><br/>
 								<input type="text" class="form-control" id="doc" name="doc" readonly value="{{ persona.doc }}"/>
-							</div>
-							
-							<div class="col-md-4 form-group">
-								<label for="doctit">Documento del titular</label><br/>
-								<input type="text" class="form-control" id="doctit" name="doctit" readonly value="{{ persona.doctit }}"/>
 							</div>
 						</div>
 					</fieldset>
@@ -388,6 +368,7 @@
 						<div class="col-md-3 text-center">
 							<a href="../controllers/listado_atencion.php?funcion=mostrarListado">
 								<input class="btn btn-block btn-danger btn-lg" type="button" name="cancelar" value="Atras" />
+							</br>
 							</a>
 						</div>
 					</div>

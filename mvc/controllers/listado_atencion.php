@@ -129,7 +129,7 @@ function verMas()
 	
 	
 		$asistencia = $GLOBALS['db']->select("SELECT sigssaludfme_asistencia.cod_ser, sigssaludfme_asistencia.fec_pedido, sigssaludfme_asistencia.hora_pedido, 
-													 sigssaludfme_asistencia.nombre, persona.sexo, sigssaludfme_asistencia.numdoc, sigssaludfme_asistencia.doctitu,
+													 sigssaludfme_asistencia.nombre, persona.sexo, sigssaludfme_asistencia.numdoc,
 													 sigssaludfme_asistencia.profesional, sigssaludfme_asistencia.dessit, sigssaludfme_asistencia.fec_ate, sigssaludfme_asistencia.hora_aten,
 													 sigssaludfme_asistencia.sintomas, sigssaludfme_asistencia.tratamiento, sigssaludfme_asistencia.diagnostico, 
 													 sigssaludfme_asistencia.domicilio, sigssaludfme_asistencia.casa_nro, sigssaludfme_asistencia.barrio, sigssaludfme_asistencia.localidad,
@@ -159,7 +159,6 @@ function verMas()
 		'hora'		=>	$asistencia[0]['hora_pedido'],
 		'nombre'	=>	$asistencia[0]['nombre'],
 		'doc'		=>	$asistencia[0]['numdoc'],
-		'doctit'	=>	$asistencia[0]['doctitu'],
 		'prof'		=>	$asistencia[0]['profesional'],
 		'desc'		=>	$asistencia[0]['dessit'],
 		'fech_ate'		=>	$asistencia[0]['fec_ate'],

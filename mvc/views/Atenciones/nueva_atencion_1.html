@@ -14,76 +14,25 @@
 {% endblock %}
 
 {% block content %}
-<div class="box">
-    <div class="box-header">
-      	<h3 class="box-title">Listado de Asociados</h3>
-    </div>
-    
-    <div class="box-body">
-      	<table id="tabla" class="table table-bordered table-striped">
-        	<thead>
-		        <tr>
-			        <th>Nro.</th>
-			        <th>Nombre y Apellido</th>
-			        <th>DNI</th>
-					<th>Sexo</th>
-					<th>Acciones</th>
-		        </tr>
-        	</thead>
-			
-      	</table>
-    </div>    
-</div>
-{% endblock %}
-
-{% block javascript %}
-<script>
-	$(document).on("ready", function(){
-		listar();
-	})
- 	var listar= function(){
-		 $('#tabla').DataTable({
-			"ajax": {
-			"method":"POST",
-			"url":"../controllers/atenciones.php?funcion=mostrarListadoAjax"},
-  		"columns": [
-			  {"data":"numero_soc"},
-			  {"data":"nombre"},
-			  {"data":"numdoc"},
-			  {"data":"sexo",
-			  "render": function(data, type, row, meta){
-				  if(data=='1')
-					return	'Masculino'
-					else
-					return 'femenino'
-				}
-			  },
-			  {"data":"numero_soc",
-				  "render": function(data, type, row, meta){
-					  if(data>=100000)
-						return	data = '<a class="btn btn-success" href=../controllers/atenciones.php?funcion=verMasParticular&num_soc=' + data + '>Ver más</a>';
-					else
-						return	data = '<a class="btn btn-success" href=../controllers/atenciones.php?funcion=verMas&num_soc=' + data + '>Ver más</a>';
-				}
-			  }
-		  ],
- 		"language": {
-            "lengthMenu": "Mostrando _MENU_ registros por página",
-			"search": "Buscar",
-            "zeroRecords": "Ningún registro coincide con lo ingresado",
-            "info": "Mostrando página _PAGE_ de _PAGES_",
-            "infoEmpty": "No hay resultados",
-            "infoFiltered": "(de un total de _MAX_ total registros)",
-			"paginate": {
-				"previous": "Anterior",
-				"next": "Siguiente"
-			}
-        },
-		"columnDefs": [
-			{ "width": "5%", "targets": 4 }
-  		]
+<div class="box-body">
+	<div class="box">
+		<div class="box-header"> 
+				<h3 class="box-title">Busqueda de asociados</h3>
+		</div>
 		
- 	});
-	 }
-</script>
+		<div class="box-body">
+			<form action="../controllers/atenciones.php?funcion=verMas" method="post">
+				<div class="row">
+					<div class="col-md-4 col-md-offset-4">
+						<label for="nombre">Número de documento</label>
+						<input type="number" class="form-control" id="num_doc" name="num_doc" required maxlength="9"/>
+						</br>
+						<input class="btn btn-block btn-success" id="buscar_usuario" type="submit" name="buscar_usuario" value="Buscar asociado"/>
+						</br>
+					</div>
+				</div>
+			</form>
+		</div>    
+	</div>
+</div>    
 {% endblock %}

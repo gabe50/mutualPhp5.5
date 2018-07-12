@@ -45,33 +45,35 @@ function mostrarListado(){
 		$exito=1;
 	}
 	echo $GLOBALS['twig']->render('/Atenciones/historia_listado.html', compact('exito','use','priv'));
-	
-}
-
-function mostrarListadoAjax(){
-	$resultado = $GLOBALS['db']->select('SELECT nombre, numdoc, sexo, id_persona FROM persona');
-
-	$arreglo["data"]=$resultado;
-
-	echo json_encode($arreglo);
 }
 
 function verMas(){
 	global $use;
 	global $priv;
-	if(!isset($_GET['id_persona']))
+	if(!isset($_POST['num_doc']))
 	{
 		$error=[
 				'menu'			=>"Historia Clinica",
 				'funcion'		=>"Perfil de usuarios",
-				'descripcion'	=>"No se encontraron resultados."
+				'descripcion'	=>"No se ha ingresado un numero de documento valido."
 				];
 		echo $GLOBALS['twig']->render('/Atenciones/error.html', compact('error','use','priv'));
 	}
-	$id_persona=$_GET['id_persona'];
+
+	$numero_doc=$_POST['num_doc'];
 	
 	$resultado = $GLOBALS['db']->select("SELECT * FROM persona
-								WHERE id_persona='$id_persona' ");
+								WHERE numdoc='$numero_doc' ");
+
+	if(!$resultado)
+	{
+		$error=[
+				'menu'			=>"Historia Clinica",
+				'funcion'		=>"Perfil de usuarios",
+				'descripcion'	=>"No se encuentra a la persona con dni $numero_doc"
+				];
+		echo $GLOBALS['twig']->render('/Atenciones/error.html', compact('error','use','priv'));
+	}
 
 	if($resultado)
 	{

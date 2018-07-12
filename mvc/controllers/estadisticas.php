@@ -138,12 +138,12 @@ function atencionesAsociadosProceso(){
 			
 						//Consulta que me devuelve la cantidad de atenciones que recibió cada asociado ese DÍA en particular, con el nombre del asociado y su número de documento
 						$data = $GLOBALS['db']->select("SELECT tablaAUX.cantidad AS cantidad, persona.numdoc AS numdoc, persona.nombre AS nombre 
-														FROM (SELECT doctitu, nombre, COUNT(*) AS cantidad FROM sigssaludfme_asistencia 
+														FROM (SELECT numdoc, nombre, COUNT(*) AS cantidad FROM sigssaludfme_asistencia 
 														WHERE YEAR(fec_pedido)='$anio'
 														AND MONTH(fec_pedido)='$mes'
 														AND DAY(fec_pedido)='$dia'
-														GROUP BY doctitu) AS tablaAUX 
-														INNER JOIN persona on persona.numdoc = tablaAUX.doctitu ORDER BY cantidad DESC");
+														GROUP BY numdoc) AS tablaAUX 
+														INNER JOIN persona on persona.numdoc = tablaAUX.numdoc ORDER BY cantidad DESC");
 						 
 						//Devuelvo los datos solicitados por el metodo ajax
 						
@@ -153,11 +153,11 @@ function atencionesAsociadosProceso(){
 				{
 					//Consulta que me devuelve la cantidad de atenciones que recibió cada asociado ese MES en particular, con el nombre del asociado y su numero de documento
 					$data = $GLOBALS['db']->select("SELECT tablaAUX.cantidad AS cantidad, persona.numdoc AS numdoc, persona.nombre AS nombre 
-													FROM (SELECT doctitu, nombre, COUNT(*) AS cantidad FROM sigssaludfme_asistencia 
+													FROM (SELECT numdoc, nombre, COUNT(*) AS cantidad FROM sigssaludfme_asistencia 
 													WHERE YEAR(fec_pedido)='$anio'
 													AND MONTH(fec_pedido)='$mes'
-													GROUP BY doctitu) AS tablaAUX 
-													INNER JOIN persona on persona.numdoc = tablaAUX.doctitu ORDER BY cantidad DESC");
+													GROUP BY numdoc) AS tablaAUX 
+													INNER JOIN persona on persona.numdoc = tablaAUX.numdoc ORDER BY cantidad DESC");
 					 
 					//Devuelvo los datos solicitados por el metodo ajax
 					
@@ -168,10 +168,10 @@ function atencionesAsociadosProceso(){
 			{
 				//Consulta que me devuelve la cantidad de atenciones que se dieron en cada mes, del año enviado
 				$data = $GLOBALS['db']->select("SELECT tablaAUX.cantidad AS cantidad, persona.numdoc AS numdoc, persona.nombre AS nombre 
-												FROM (SELECT doctitu, nombre, COUNT(*) AS cantidad FROM sigssaludfme_asistencia 
+												FROM (SELECT numdoc, nombre, COUNT(*) AS cantidad FROM sigssaludfme_asistencia 
 												WHERE YEAR(fec_pedido)='$anio' 
-												GROUP BY doctitu) AS tablaAUX 
-												INNER JOIN persona on persona.numdoc = tablaAUX.doctitu ORDER BY cantidad DESC");
+												GROUP BY numdoc) AS tablaAUX 
+												INNER JOIN persona on persona.numdoc = tablaAUX.numdoc ORDER BY cantidad DESC");
 				 
 				//Devuelvo los datos solicitados por el metodo ajax
 				

@@ -14,71 +14,29 @@
 {% endblock %}
 
 {% block content %}
-<div class="box">
-    <div class="box-header">
-      	<h3 class="box-title">Historia Clinica - Listado de Personas</h3>
+<div class="box-body">
+	<div class="box">
+		<div class="box-header"> 
+				<h3 class="box-title">Busqueda de personas</h3>
+		</div>
+
+		<div class="box-header text-center" {% if exito == '0' %} style="display:none" {% endif %}>
+			<h3><span class="label label-success">Historia Clinica modificada exitosamente.</span></h3>
+		</div>
+		
+		<div class="box-body">
+			<form action="../controllers/historia.php?funcion=verMas" method="post">
+				<div class="row">
+					<div class="col-md-4 col-md-offset-4">
+						<label for="nombre">Número de documento</label>
+						<input type="number" class="form-control" id="num_doc" name="num_doc" required maxlength="9"/>
+						</br>
+						<input class="btn btn-block btn-success" id="buscar_usuario" type="submit" name="buscar_usuario" value="Buscar asociado"/>
+						</br>
+					</div>
+				</div>
+			</form>
+		</div>    
 	</div>
-
-	<div class="box-header text-center" {% if exito == '0' %} style="display:none" {% endif %}>
-		<h1><span class="label label-success">Historia Clinica modificada exitosamente.</span></h1>
-  	</div>
-    
-    <div class="box-body">
-      	<table id="tabla" class="table table-bordered table-striped">
-        	<thead>
-		        <tr>
-			        <th>Nombre y Apellido</th>
-			        <th>DNI</th>
-			        <th>Sexo</th>
-		            <th>Acciones</th>
-		        </tr>
-        	</thead>
-      	</table>
-    </div>    
-</div>
-{% endblock %}
-
-{% block javascript %}
-<script>
- 	$('#tabla').DataTable({
-		processing: true,
-		"ajax": {
-			"method":"POST",
-			"url":"../controllers/historia.php?funcion=mostrarListadoAjax"},
-  		"columns": [
-			  {"data":"nombre"},
-			  {"data":"numdoc"},
-			  {"data":"sexo",
-			  "render": function(data, type, row, meta){
-				  if(data=='1')
-					return	'Masculino'
-					else
-					return 'femenino'
-				}
-			  },
-			  {"data":"id_persona",
-				  "render": function(data, type, row, meta){
-					return	data = '<a class="btn btn-success" href=../controllers/historia.php?funcion=verMas&id_persona=' + data + '>Ver más</a>';
-				}
-			  }
-		  ],
- 		"language": {
-			"loadingRecords": "&nbsp;",
-      		"processing": "Cargando...",
-            "lengthMenu": "Mostrando _MENU_ registros por página",
-			"search": "Buscar",
-            "zeroRecords": "Ningún registro coincide con lo ingresado",
-            "info": "Mostrando página _PAGE_ de _PAGES_",
-            "infoEmpty": "No hay resultados",
-            "infoFiltered": "(de un total de _MAX_ total registros)",
-			"paginate": {
-				"previous": "Anterior",
-				"next": "Siguiente"
-			}
-        },
-		"columnDefs": [
-			{ "width": "5%", "targets": 3 }
-  		]
- 	});
-</script>
+</div>    
 {% endblock %}
