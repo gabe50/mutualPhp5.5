@@ -86,15 +86,14 @@ function verMas()
 		return;
 	}
 
-	$datos_atenciones =  $GLOBALS['db']->select("SELECT sigssaludsigssaludfme_asistencia.doctitu, sigssaludsigssaludfme_asistencia.numdoc, sigssaludsigssaludfme_asistencia.nombre,
-	sigssaludsigssaludfme_asistencia.fec_pedido, sigssaludsigssaludfme_asistencia.hora_pedido, sigssaludsigssaludfme_asistencia.dessit, sigssaludsigssaludfme_asistencia.fec_ate,
-	sigssaludsigssaludfme_asistencia.sintomas, sigssaludsigssaludfme_asistencia.diagnostico, sigssaludsigssaludfme_asistencia.tratamiento, sigssaludsigssaludfme_asistencia.hora_aten,
-	sigssaludsigssaludfme_asistencia.profesional
-	FROM sigssaludsigssaludfme_asistencia, socios, persona 
+	$datos_atenciones = $GLOBALS['db']->select("SELECT sigssaludfme_asistencia.numdoc, sigssaludfme_asistencia.nombre,
+	sigssaludfme_asistencia.fec_pedido, sigssaludfme_asistencia.hora_pedido, sigssaludfme_asistencia.dessit, sigssaludfme_asistencia.fec_ate,
+	sigssaludfme_asistencia.sintomas, sigssaludfme_asistencia.diagnostico, sigssaludfme_asistencia.tratamiento, sigssaludfme_asistencia.hora_aten,
+	sigssaludfme_asistencia.profesional
+	FROM sigssaludfme_asistencia, socios, persona 
 	WHERE persona.numdoc = '$numero_doc' 
 	AND socios.id_persona = persona.id_persona
-	AND numero_soc = soc_titula
-	AND persona.numdoc = sigssaludsigssaludfme_asistencia.doctitu");
+	AND numero_soc = soc_titula");
 
 	$fecha=$datos_basicos[0]['fecnacim'];
 	$dias = explode("-", $fecha, 3);
@@ -171,6 +170,7 @@ function verMas()
 	}
 	else{
 		//la PERSONA puede ser titular, adherente o particular y al menos paga por cuota
+		
 		$socnumero = $persona[0]['socnumero'];
 
 		$persona = $GLOBALS['db']->select("SELECT a.numeral, b.nombre, a.fecha_alta, a.nombre as nombre_persona, a.documento, a.fecnacim, 
@@ -182,7 +182,7 @@ function verMas()
 
 		if($socnumero>=100000){
 			//es un particular
-			$datos_servicios = $GLOBALS['db']->select("SELECT  a.numeral, b.nombre, nombre_persona as nombre_persona, a.documento, a.fecnacim, a.codigo, a.estado, a.importe, a.codsrimp, a.socnumero
+			$datos_servicios = $GLOBALS['db']->select("SELECT  a.numeral, b.nombre, a.nombre as nombre_persona, a.documento, a.fecnacim, a.codigo, a.estado, a.importe, a.codsrimp, a.socnumero
 			FROM fme_adhsrv a, tar_srv b
 			WHERE a.codigo = b.idmutual
 			AND a.fecha_baja = '0000-00-00'
@@ -487,9 +487,33 @@ function generarAtencion()
 		$id_persona= $_POST['id_persona'];
 
 		$profesional_explode = explode('|',$profesional); //$profesional_explode[0] es nombre y $profesional_explode[1] es id_profesional
+
+		//--------------COMIENZA LA BUSQUEDA DE LA CUENTA Y DEL SOCNUM
+		$persona= $GLOBALS['db']->select("SELECT a.numeral, b.nombre, a.fecha_alta, a.nombre as nombre_persona, a.documento, a.fecnacim, 
+		a.codigo, a.estado, a.importe, a.codsrimp, a.socnumero
+		FROM fme_adhsrv a, tar_srv b
+		WHERE a.codigo = b.idmutual
+		AND a.fecha_baja = '0000-00-00'
+		AND a.documento = '$numdoc'");
+		$socnumero = $persona[0]['socnumero'];
+		if(is_null($socnumero)){
+			$socnumero='NULL';
+		}
+
+		$persona = $GLOBALS['db']->select("SELECT a.codigo, b.nombre, a.fecha_alta, a.nombre as nombre_persona, a.documento, a.fechanac, a.estado, a.importe, a.cuenta
+		FROM tar_srvadherentes a, tar_srv b
+		WHERE a.codigo = b.codigo
+		AND a.fecha_baja = '0000-00-00'
+		AND a.documento = '$numdoc'");
+		$cuenta = $persona[0]['cuenta'];
+		if(is_null($cuenta)){
+			$cuenta='NULL';
+		}
 		
-		$resultado=$GLOBALS['db']->query("INSERT INTO sigssaludfme_asistencia (cod_ser,numdoc,nombre,fec_pedido,hora_pedido,dessit,profesional,domicilio,casa_nro,barrio,localidad,codpostal,dpmto,id_persona, id_profesional)
-				VALUES ('$cod_ser','$numdoc','$nombre','$fec_pedido','$hora_pedido','$dessit','$profesional_explode[0]','$dom','$nrocasa','$barrio','$localidad','$cod_postal','$dpto','$id_persona','$profesional_explode[1]')");
+		//--------------TERMINA LA BUSQUEDA DE LA CUENTA Y DEL SOCNUM
+		
+		$resultado=$GLOBALS['db']->query("INSERT INTO sigssaludfme_asistencia (cod_ser,numdoc,nombre,fec_pedido,hora_pedido,dessit,profesional,domicilio,casa_nro,barrio,localidad,codpostal,dpmto,id_persona, id_profesional, socnumero, cuenta)
+				VALUES ('$cod_ser','$numdoc','$nombre','$fec_pedido','$hora_pedido','$dessit','$profesional_explode[0]','$dom','$nrocasa','$barrio','$localidad','$cod_postal','$dpto','$id_persona','$profesional_explode[1]', $socnumero, $cuenta)");
 		
 		$res2=$GLOBALS['db']->select("SELECT idnum FROM sigssaludfme_asistencia WHERE idnum=LAST_INSERT_ID()");//obtentemos el id_atencion del ultimo insert realizado
 				
@@ -500,8 +524,8 @@ function generarAtencion()
 			$error=[
 					'menu'			=>"Atenciones",
 					'funcion'		=>"generarAtencion",
-					'descripcion'	=>"No se pudo realizar la consulta: INSERT INTO sigssaludfme_asistencia (cod_ser,doctitu,numdoc,nombre,fec_pedido,hora_pedido,dessit,profesional,domicilio,casa_nro,barrio,localidad,codpostal,dpmto,id_persona, id_profesional)
-					VALUES ('$cod_ser','$doctitu','$numdoc','$nombre','$fec_pedido','$hora_pedido','$dessit','$profesional_explode[0]','$dom','$nrocasa','$barrio','$localidad','$cod_postal','$dpto','$id_persona','$profesional_explode[1]')"
+					'descripcion'	=>"No se pudo realizar la consulta: (INSERT INTO sigssaludfme_asistencia (cod_ser,numdoc,nombre,fec_pedido,hora_pedido,dessit,profesional,domicilio,casa_nro,barrio,localidad,codpostal,dpmto,id_persona, id_profesional, socnumero, cuenta)
+					VALUES ('$cod_ser','$numdoc','$nombre','$fec_pedido','$hora_pedido','$dessit','$profesional_explode[0]','$dom','$nrocasa','$barrio','$localidad','$cod_postal','$dpto','$id_persona','$profesional_explode[1]', $socnumero, $cuenta))"
 					];
 			echo $GLOBALS['twig']->render('/Atenciones/error.html', compact('error','use','priv'));	
 			return;

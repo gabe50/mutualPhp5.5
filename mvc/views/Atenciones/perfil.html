@@ -136,7 +136,7 @@
                                                     <td>{{ asistencia['nombre'] }}</td>
                                                     <td>{{ asistencia['fec_pedido'] }} {{ asistencia['hora_pedido'] }}</td>
 													
-													{% if asistencia.fec_ate == '0000-00-00' %}
+													{% if asistencia.fec_ate is null %}
 														<td>Todavía no finaliza</td>
 													{% else %}
 														<td>{{ asistencia['fec_ate'] }} {{ asistencia['hora_aten'] }}</td>
@@ -144,7 +144,7 @@
 													
 													<td>{{ asistencia['diagnostico'] }}</td>
                                                     
-													{% if asistencia.fec_ate == '0000-00-00' %}
+													{% if asistencia.fec_ate is null %}
 														<td><span class="label label-warning">En progreso</span></td>
 													{% else %}
 														<td><span class="label label-success">Finalizada</span></td>
