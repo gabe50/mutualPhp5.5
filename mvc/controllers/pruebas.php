@@ -56,25 +56,15 @@ function verMas()
 	global $use;
 	global $priv;
 	
-	//---------------CONSULTA QUE DEVUELVE TODA LA INFO DEL ASOCIADO TITULAR----------------
 
-	if(!isset($_POST['num_doc']))
-	{
-		$error=[
-		'menu'			=>"Atenciones",
-		'funcion'		=>"verMas",
-		'descripcion'	=>"No se ha ingresado un numero de documento valido."
-		];
-		echo $GLOBALS['twig']->render('/Atenciones/error.html', compact('error','use','priv'));	
-		return;
-	}
 	
-	$numero_doc = $_POST['num_doc'];
+	$numero_doc = '6443304';
 
 	$datos_basicos = $GLOBALS['db']->select("SELECT nombre, numdoc, sexo, fecnacim, domicilio, casa_nro, barrio, localidad, dpmto
 			FROM persona 
-			WHERE CAST(numdoc AS UNSIGNED) = '$numero_doc'");
-
+			");
+	echo var_dump($datos_basicos);
+	return;
 	if(!$datos_basicos)
 	{
 		$error=[
@@ -115,9 +105,9 @@ function verMas()
 		$persona = $GLOBALS['db']->select("SELECT a.codigo, b.nombre, a.fecha_alta, a.nombre as nombre_persona, a.documento, a.fechanac, a.estado, a.importe, a.cuenta
 		FROM tar_srvadherentes a, tar_srv b
 		WHERE a.codigo = b.codigo
-		AND a.fecha_baja = '0000-00-00'
-		AND CAST(a.documento AS UNSIGNED) = '$numero_doc'");
-		
+		AND a.fecha_baja = '0000-00-00'");
+		echo var_dump($persona);
+		return;
 		$cuenta = $persona[0]['cuenta'];
 
 		$titular = $GLOBALS['db']->select("SELECT a.codigo, b.nombre, a.fecha_alta, a.nombre as nombre_persona, a.documento, a.fechanac, a.estado, a.importe, a.cuenta
@@ -126,7 +116,6 @@ function verMas()
 		AND a.fecha_baja = '0000-00-00'
 		AND a.cuenta = '$cuenta'
 		AND a.tipo=1");
-
 		
 		if(!$titular){
 			//no es titular y pago por tarjeta o sea es adherente
@@ -171,14 +160,15 @@ function verMas()
 		//la PERSONA puede ser titular, adherente o particular y al menos paga por cuota
 		
 		$socnumero = $persona[0]['socnumero'];
-
-		$persona = $GLOBALS['db']->select("SELECT a.numeral, b.nombre, a.fecha_alta, a.nombre as nombre_persona, a.documento, a.fecnacim, a.tipo,
+		
+		$persona = $GLOBALS['db']->select("SELECT a.numeral, b.nombre, a.fecha_alta, a.nombre as nombre_persona, a.documento, a.fecnacim, a.tipo, 
 		a.codigo, a.estado, a.importe, a.codsrimp, a.socnumero
 		FROM fme_adhsrv a, tar_srv b
 		WHERE a.codigo = b.idmutual
 		AND a.fecha_baja = '0000-00-00'
 		AND a.socnumero = '$socnumero'");
 
+		
 		if($socnumero>=100000){
 			//es un particular
 			$datos_servicios = $GLOBALS['db']->select("SELECT  a.numeral, b.nombre, a.nombre as nombre_persona, a.documento, a.fecnacim, a.codigo, a.estado, a.importe, a.codsrimp, a.socnumero
@@ -199,7 +189,8 @@ function verMas()
 		else{
 			//no es un particular, por lo que es un titular o un adherente
 			$tipo = $persona[0]['tipo'];
-			
+			echo var_dump($tipo);
+			return;
 			if($tipo==1){
 				//Es titular y no particular ni adherente
 
@@ -318,7 +309,7 @@ function mostrarFormulario()
 	FROM fme_adhsrv a, tar_srv b
 	WHERE a.codigo = b.idmutual
 	AND a.fecha_baja = '0000-00-00'
-	AND CAST(a.documento AS UNSIGNED) = '$numero_doc'");
+	AND a.documento = '$numero_doc'");
 
 
 	if(!$persona){
@@ -327,7 +318,7 @@ function mostrarFormulario()
 		FROM tar_srvadherentes a, tar_srv b
 		WHERE a.codigo = b.codigo
 		AND a.fecha_baja = '0000-00-00'
-		AND CAST(a.documento AS UNSIGNED) = '$numero_doc'
+		AND a.documento = '$numero_doc'
 		AND (a.codigo = '3' OR a.codigo = '48')");
 
 		if(!$persona){
@@ -346,7 +337,7 @@ function mostrarFormulario()
 			FROM fme_adhsrv a, tar_srv b
 			WHERE a.codigo = b.idmutual
 			AND a.fecha_baja = '0000-00-00'
-			AND CAST(a.documento AS UNSIGNED) = '$numero_doc'
+			AND a.documento = '$numero_doc'
 			AND (a.codigo = '020' OR a.codigo = '884')");
 
 			if(!$persona){
@@ -493,7 +484,7 @@ function generarAtencion()
 		FROM fme_adhsrv a, tar_srv b
 		WHERE a.codigo = b.idmutual
 		AND a.fecha_baja = '0000-00-00'
-		AND CAST(a.documento AS UNSIGNED) = '$numdoc'");
+		AND a.documento = '$numdoc'");
 		$socnumero = $persona[0]['socnumero'];
 		if(is_null($socnumero)){
 			$socnumero='NULL';
@@ -503,7 +494,7 @@ function generarAtencion()
 		FROM tar_srvadherentes a, tar_srv b
 		WHERE a.codigo = b.codigo
 		AND a.fecha_baja = '0000-00-00'
-		AND CAST(a.documento AS UNSIGNED) = '$numdoc'");
+		AND a.documento = '$numdoc'");
 		$cuenta = $persona[0]['cuenta'];
 		if(is_null($cuenta)){
 			$cuenta='NULL';
@@ -572,10 +563,10 @@ function generarPDF()
 		$dessit=$res['dessit'];
 		$profesional=$res['profesional'];
 		if($res['sexo']=='1'){
-			$sexo="Femenino";	
+			$sexo="Masculino";	
 		}
 		else{
-			$sexo="Masculino";
+			$sexo="Femenino";
 		}
 			
 		$tel=$res['tel_fijo'];

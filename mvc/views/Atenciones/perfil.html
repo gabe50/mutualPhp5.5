@@ -32,9 +32,9 @@
                                         <div class="box-header">                                  
                                             <div class="user-block">
                                                 {% if res.sexo == 1 %}
-                                                    <img class="img-circle img-bordered-sm" src="../../static/images/user.png" alt="user image">                 
+                                                    <img class="img-circle img-bordered-sm" src="../../static/images/user_fem.png" alt="user image">                 
                                                 {% else %}
-                                                    <img class="img-circle img-bordered-sm" src="../../static/images/user_fem.png" alt="user image">
+                                                    <img class="img-circle img-bordered-sm" src="../../static/images/user.png" alt="user image">
                                                 {% endif %}
                                                 <span class="username">
                                                   <h4 class="box-title"><b><a href="#">{{ res.nombre }}</a></b></h4>
@@ -48,11 +48,11 @@
                                                     <p><label>Número de documento del titular :</label> {{ res.numdoc }}
                                                     </p>
                                                     {% if res.sexo == 1 %}
-                                                        <p><label>Sexo :</label> Masculino 
+                                                        <p><label>Sexo :</label> Femenino
 														<label style="color:white">_______</label><label>edad : </label>{{ res.edad }}
                                                         </p>                    
                                                     {% else %}
-                                                        <p><label>Sexo :</label> Femenino 
+                                                        <p><label>Sexo :</label> Masculino 
 														<label style="color:white">_______</label><label>edad : </label>{{ res.edad }}
                                                         </p> 
                                                     {% endif %}

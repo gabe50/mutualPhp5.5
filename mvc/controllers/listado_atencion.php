@@ -73,11 +73,11 @@ function mostrarListado()
 			$asistencias[$i]['dni']		=	$res1['numdoc'];
 			if($res1['sexo']==1)
 			{
-				$asistencias[$i]['sexo']	=	'Masculino';
+				$asistencias[$i]['sexo']	=	'Femenino';
 			}
 			else
 			{
-				$asistencias[$i]['sexo']	=	'Femenino';
+				$asistencias[$i]['sexo']	=	'Masculino';
 			}
 			$asistencias[$i]['estado']	=	'0';
 			$asistencias[$i]['fecha']	=	$res1['fec_pedido'];
@@ -94,11 +94,11 @@ function mostrarListado()
 			$asistencias[$i]['dni']		=	$res1['numdoc'];
 			if($res1['sexo']==1)
 			{
-				$asistencias[$i]['sexo']	=	'Masculino';
+				$asistencias[$i]['sexo']	=	'Femenino';
 			}
 			else
 			{
-				$asistencias[$i]['sexo']	=	'Femenino';
+				$asistencias[$i]['sexo']	=	'Masculino';
 			}
 			$asistencias[$i]['estado']	=	'1';
 			$asistencias[$i]['fecha']	=	$res1['fec_pedido'];
@@ -176,9 +176,9 @@ function verMas()
 		'id_persona'	=>	$asistencia[0]['id_persona']
 	];
 	if($asistencia[0]['sexo']==1)
-		$persona['sexo']='Masculino';
-	else
 		$persona['sexo']='Femenino';
+	else
+		$persona['sexo']='Masculino';
 	
 	$id_persona = $asistencia[0]['id_persona'];
 
